@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import theme from '../styles/mainTheme'
 import {connect} from 'react-redux'
 import {selectOne as selectOneAction} from '../actions'
-import { render } from '@testing-library/react'
 
 const StyledEntry = styled.div`
     display: inline-block;
@@ -53,32 +52,27 @@ class Entry extends React.Component {
 
     render() {
 
-        const {id, entries, selectOne} = this.props
+        const {selectOne, id, selected, timeAdded, expanded, contents} = this.props
 
-        const entryData = entries[id]
-    
-        const   lineTypes = entryData.contents.map(e => <LineType key={e.id}><b>{e.type}</b>: {e.text}</LineType>),
-                oneLine = (<LineType><b>{entryData.contents[0].type}</b>: {entryData.contents[0].text.substring(0, 20).concat('...')}</LineType>)
+        const lineTypes = contents.map((e, i) => <LineType key={i}><b>{e.type}</b>: {e.text}</LineType>),
+            oneLine = (<LineType><b>{contents[0].type}</b>: {contents[0].text.substring(0, 20).concat('...')}</LineType>)
+           
+            return (  
+                <StyledEntry selected={selected}>
+                    <StyleAddedAt>Added: {timeAdded.toLocaleString()}</StyleAddedAt> 
+                    <StyledParagraph>
+                        {expanded ? lineTypes : oneLine}
+                        <SelectButton onClick={() => selectOne(selected, id)}>[Select]</SelectButton>
+                    </StyledParagraph>
+                </StyledEntry>
+            )
 
-        return (  
-            <StyledEntry selected={entryData.selected}>
-                <StyleAddedAt>Added: {entryData.timeAdded.toLocaleString()}</StyleAddedAt> 
-                <StyledParagraph>
-                    {entryData.expanded ? lineTypes : oneLine}
-                    <SelectButton onClick={() => selectOne(entryData)}>[Select]</SelectButton>
-                </StyledParagraph>
-            </StyledEntry>
-        )
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    selectOne: (data) => dispatch(selectOneAction(data))
+    selectOne: (data, id) => dispatch(selectOneAction(data, id))
 })
 
-const mapStateToProps = state => {
-    const {entries} = state
-    return {entries}
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Entry)
+export default connect(null, mapDispatchToProps)(Entry)

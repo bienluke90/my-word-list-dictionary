@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import navIcon from '../assets/navicon.svg'
 import cancelIcon from '../assets/cancelicon.svg'
-import goIcon from '../assets/goicon.svg'
+import acceptIcon from '../assets/accepticon.svg'
 import theme from '../styles/mainTheme.js'
 import PropTypes from 'prop-types'
 
@@ -40,7 +40,8 @@ const NavIcon = styled.button`
     `}
 
     @media screen and (min-width: ${theme.device.md}) {
-        display: none;
+       width: 75px;
+       height: 65px;
     }
 `
 
@@ -53,52 +54,55 @@ const NavList = styled.ul`
     background-color: ${theme.default_nav_background};
     z-index: 99999999;
     transform: translateX(100%);
-    
+    overflow-y: scroll;
+
     ${({navOpened}) => navOpened && `
         transform: translateX(0);
         transition: 0.5s transform;
     `}
 
     @media screen and (min-width: ${theme.device.md}) {
-        transition: 0 none;
-        background-color: transparent;
-        position: static;
-        display: flex;
-        height: 100%;
-        align-items: center;
-        transform: none;
+        width: 50%;
+        top: ${theme.header_desktop_height};
         ${({navOpened}) => navOpened && `
             transform: translateX(0);
         `}
     }
+
+    @media screen and (min-width: ${theme.device.xl}) {
+        width: 35%;
+    }
 `
 
 const ListItem = styled.li`
+    position: relative;
     padding: 10px 15px;
     list-style-type: none;
     border-bottom: 1px solid rgba(75,75,125,0.5);
-    background-image: url(${goIcon});
-    background-repeat: no-repeat;
-    background-position: 90% center;
-    background-size: 30px 30px;
-    
+    cursor: pointer;
+    ${({selected}) => selected && `
+      &::after {
+        background-image: url(${acceptIcon});
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 20px 20px;
+    }  
+    `}
+    &::after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        top: 50%;
+        right: 20px;
+        border: 1px solid ${theme.default_button_text_color};
+        transform: translateY(-50%);
+    }
     &:hover {
             background-color: rgba(75,75,125,0.5);
         }
-
-    @media screen and (min-width: ${theme.device.md}) { 
-        display: inline-block;
-        width: 230px;
-        border: 2px solid rgba(75,75,75,0.3);
-        background-image: linear-gradient(0deg, rgba(125,125,125,0.75) 20%, rgba(180,180,180,0.75) 100%);
-        background-size: 100% 100%;
-        text-shadow: 1px 1px rgba(175,175,175,0.75);
-        box-shadow: 3px 3px 10px 10px rgba(0,0,0,0.15) inset;
-        cursor: pointer;
-        border-radius: 5px;
-        text-align: center;
-        margin: 10px; 
-    }   
 
 `
 

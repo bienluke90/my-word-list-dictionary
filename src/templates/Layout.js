@@ -6,8 +6,10 @@ import {LogoImage, LogoTitle} from './LogoImageTitle.js'
 import StyledHeader from './Header.js'
 import {StyledNavigation, NavIcon, NavList, ListItem} from './HeaderNavigation.js'
 import Dashboard from '../components/Dashboard.js'
-import { Provider } from 'react-redux';
-import store from '../store';
+import {connect} from 'react-redux'
+import {showAll as showAllAction} from '../actions'
+import {showTag as showTagAction} from '../actions'
+import {deselectAll as deselectAllAction} from '../actions'
 
 const MainContainer = styled.div`
     display: flex;
@@ -32,7 +34,7 @@ const MainContent = styled.main`
     position: absolute;
     top: calc(${theme.header_mobile_height} + ${theme.gutterWidth});
     left: 0;
-    z-index: 0;
+    z-index: 9;
     background-color: ${theme.default_content_background};
     width: 100%;
     min-height: 100vh;
@@ -51,12 +53,6 @@ const MainContent = styled.main`
     `}
     @media screen and (min-width: ${theme.device.md}) {
         top: calc(${theme.header_desktop_height} + ${theme.gutterWidth});
-        ${({navOpened}) => navOpened && `
-        ::after {
-                content: "";
-                display: none;
-            }
-        `}
     }
 `
 
@@ -80,37 +76,55 @@ class Layout extends React.Component {
     }
 
     render() {
-        const {navOpened} = this.state
+        const {tags, showTag, showAll, showTagEntries} = this.props, 
+              {navOpened} = this.state,
+              selectedTags = showTagEntries.map(e => e.tag)
+
+        const listItems = tags.map((l, i) => (
+            <ListItem key={i} 
+                      selected={selectedTags.includes(l)} 
+                      onClick={() => showTag(l)}>
+                <b>#{l}</b>
+            </ListItem>
+         ))
+
         return (
-            <Provider store={store}>
-                <div onClick={this.state.navOpened ? this.handleClick : null}>
-                    <StyledHeader>  
-                        <MainContainer>
-                            <LogoImage src={bookIcon} alt="Dictionary Icon Logo"/>
-                            <LogoTitle> <span>My Word <br /> List Dictionary</span></LogoTitle>
-                            <StyledNavigation>
-                                <NavIcon navOpened={navOpened} onClick={this.handleNavicon}>
-                                </NavIcon>
-                                <NavList navOpened={navOpened}>
-                                    <ListItem>
-                                        <b>#HASH Select</b> <br /> <small>by CATEGORY</small> 
-                                    </ListItem>
-                                    <ListItem>
-                                        <b>#HASH Select</b> <br /> <small>by TIME</small> 
-                                    </ListItem>
-                                </NavList>
-                            </StyledNavigation>
-                        </MainContainer>
-                    </StyledHeader>
+            <div onClick={this.state.navOpened ? this.handleClick : null}>
+                <StyledHeader>  
                     <MainContainer>
-                        <MainContent navOpened={navOpened}>
-                            <Dashboard />
-                        </MainContent>
+                        <LogoImage src={bookIcon} alt="Dictionary Icon Logo"/>
+                        <LogoTitle> <span>My Word <br />List Dictionary</span></LogoTitle>
+                        <StyledNavigation>
+                            <NavIcon navOpened={navOpened} onClick={this.handleNavicon}>
+                            </NavIcon>
+                            <NavList navOpened={navOpened}>
+                                <ListItem selected={!showTagEntries.length} onClick={() => showAll()}>
+                                    <b>#ALL TAGS</b>
+                                </ListItem>
+                                {listItems}
+                            </NavList>
+                        </StyledNavigation>
                     </MainContainer>
-                </div>
-            </Provider>
+                </StyledHeader>
+                <MainContainer>
+                    <MainContent navOpened={navOpened}>
+                        <Dashboard />
+                    </MainContent>
+                </MainContainer>
+            </div>
         )
     }
 }
 
-export default Layout
+const mapStateToProps = state => {
+    const {tags, showTagEntries} = state
+    return {tags, showTagEntries}
+}
+
+const mapDispatchToProps = dispatch => ({
+    showAll: () => dispatch(showAllAction()),
+    showTag: (tag) => dispatch(showTagAction(tag)),
+    deselectAll: () => dispatch(deselectAllAction())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout)

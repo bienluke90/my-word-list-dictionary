@@ -1,3 +1,18 @@
+const showAll = () => {
+    return {
+        type: 'SHOW_ALL'
+    }
+}
+
+const showTag = (tag) => {
+    return {
+        type: 'SHOW_TAG',
+        payload: {
+            tag: tag
+        }
+    }
+}
+
 const addEntry = (id, entryTags, entryContents) => {
     return {
         type: 'ADD_ENTRY',
@@ -12,22 +27,38 @@ const addEntry = (id, entryTags, entryContents) => {
     }
 }
 
-const removeEntry = (id) => {
+const removeSelected = () => {
     return {
-        type: 'REMOVE_ENTRY',
+        type: 'REMOVE_SELECTED',
+    }
+}
+
+const removeAll = () => {
+    return {
+        type: 'REMOVE_ALL'
+    }
+}
+
+
+const selectOne = (data, id) => {
+    return {
+        type: 'SELECT_ONE',
         payload: {
+            selected: data,
             id: id
         }
     }
 }
 
-const selectOne = (data) => {
+const selectAll = () => {
     return {
-        type: 'SELECT_ONE',
-        payload: {
-            theOne: data
-        }
+        type: 'SELECT_ALL'
     }
 }
 
-export {addEntry, removeEntry, selectOne}
+const deselectAll = () => {
+    return {
+        type: 'DESELECT_ALL'
+    }
+}
+export {showAll, showTag, addEntry, removeAll, removeSelected, selectOne, selectAll, deselectAll}

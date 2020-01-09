@@ -2,9 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Actions from './Actions.js'
 import Entry from './Entry.js'
-import TagTitle from './TagTitle.js'
 import styled from 'styled-components'
-import theme from '../styles/mainTheme.js'
 
 const EntryWrapper = styled.div`
     padding: 10px;
@@ -20,38 +18,26 @@ const EntryHeading = styled.h2`
 
 class Dashboard extends React.Component {
 
-    state = {
-        showTags: [...this.props.selectedTags, "english-polish", "german-english", "learning", "blabla", "english-german", "english-polish-german"]
-    }
-    
     render() {
-        const {entries} = this.props,
-              {showTags} = this.state
+        const {entries, showTagEntries} = this.props
 
         let entryList = []
 
-        entryList = !showTags.length && entries.map((e, i) => <Entry key={i} id={e.id} /> )
-        
-        if (showTags.length > 0) {
-            let entryListTemp = {}
-            for(let i of showTags) {
-                entryListTemp[i] = [...entries.filter(e => {
-                    return e.tags.includes(i)
-                })]
-            }
-
-            entryList = showTags.map((t, i) => {
-                if (entryListTemp[t].length) {
+        if (showTagEntries.length > 0) {
+            entryList = showTagEntries.map((t, i) => {
+                if (t.tag && t.entries.length) {
                     return (
                         <EntryWrapper key={i}>
-                            <EntryHeading>Tag: <u>#{t}</u></EntryHeading>
+                            <EntryHeading>Tag: <u>#{t.tag}</u></EntryHeading>
                             <br />
-                            {entryListTemp[t].map((e, i) => <Entry key={i} id={e.id} /> )}
+                            {t.entries.map((e, i) => <Entry key={i} {...e} /> )}
                             <br />
                         </EntryWrapper>
                     )
                 }
             })
+        } else if (entries.length) {
+            entryList = entries.map((e, i) => <Entry key={i} {...e} /> )
         }
 
         return (
@@ -70,8 +56,8 @@ class Dashboard extends React.Component {
 }
 
 const mapStateToProps = state => {
-    const {entries, selectedTags} = state
-    return {entries, selectedTags}
+    const {entries, showTagEntries} = state
+    return {entries, showTagEntries}
 }
 
 export default connect(mapStateToProps)(Dashboard)

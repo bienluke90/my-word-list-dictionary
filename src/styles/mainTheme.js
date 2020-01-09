@@ -4,7 +4,7 @@ const theme = {
     default_body_text_color: '#222',
     default_header_background: '#adf',
     default_header_text_color: '#111',
-    default_nav_background: '#9ce',
+    default_nav_background: '#def',
     default_button_background: '#ddd',
     default_button_background__inactive: '#aaa',
     default_button_text_color: '#111',
