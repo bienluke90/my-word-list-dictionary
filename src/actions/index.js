@@ -13,6 +13,12 @@ const showTag = (tag) => {
     }
 }
 
+const openAddNewModal = () => {
+    return {
+        type: 'OPEN_ADD_NEW_MODAL'
+    }
+}
+
 const addEntry = (id, entryTags, entryContents) => {
     return {
         type: 'ADD_ENTRY',
@@ -61,4 +67,5 @@ const deselectAll = () => {
         type: 'DESELECT_ALL'
     }
 }
-export {showAll, showTag, addEntry, removeAll, removeSelected, selectOne, selectAll, deselectAll}
+
+export {showAll, showTag, addEntry, removeAll, removeSelected, selectOne, selectAll, deselectAll, openAddNewModal}

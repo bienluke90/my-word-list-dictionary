@@ -10,6 +10,7 @@ import {connect} from 'react-redux'
 import {showAll as showAllAction} from '../actions'
 import {showTag as showTagAction} from '../actions'
 import {deselectAll as deselectAllAction} from '../actions'
+import AddNewModal from '../components/AddNewModal.js'
 
 const MainContainer = styled.div`
     display: flex;
@@ -59,7 +60,8 @@ const MainContent = styled.main`
 class Layout extends React.Component {
 
     state = {
-        navOpened: false
+        navOpened: false,
+        addNewOpened: false,
     }
 
     handleNavicon = () => {
@@ -89,29 +91,32 @@ class Layout extends React.Component {
          ))
 
         return (
-            <div onClick={this.state.navOpened ? this.handleClick : null}>
-                <StyledHeader>  
+            <>
+                <div onClick={this.state.navOpened ? this.handleClick : null}>
+                    <StyledHeader>  
+                        <MainContainer>
+                            <LogoImage src={bookIcon} alt="Dictionary Icon Logo"/>
+                            <LogoTitle> <span>My Word <br />List Dictionary</span></LogoTitle>
+                            <StyledNavigation>
+                                <NavIcon navOpened={navOpened} onClick={this.handleNavicon}>
+                                </NavIcon>
+                                <NavList navOpened={navOpened}>
+                                    <ListItem selected={!showTagEntries.length} onClick={() => showAll()}>
+                                        <b>#ALL TAGS</b>
+                                    </ListItem>
+                                    {listItems}
+                                </NavList>
+                            </StyledNavigation>
+                        </MainContainer>
+                    </StyledHeader>
                     <MainContainer>
-                        <LogoImage src={bookIcon} alt="Dictionary Icon Logo"/>
-                        <LogoTitle> <span>My Word <br />List Dictionary</span></LogoTitle>
-                        <StyledNavigation>
-                            <NavIcon navOpened={navOpened} onClick={this.handleNavicon}>
-                            </NavIcon>
-                            <NavList navOpened={navOpened}>
-                                <ListItem selected={!showTagEntries.length} onClick={() => showAll()}>
-                                    <b>#ALL TAGS</b>
-                                </ListItem>
-                                {listItems}
-                            </NavList>
-                        </StyledNavigation>
+                        <MainContent navOpened={navOpened}>
+                            <Dashboard />
+                        </MainContent>
                     </MainContainer>
-                </StyledHeader>
-                <MainContainer>
-                    <MainContent navOpened={navOpened}>
-                        <Dashboard />
-                    </MainContent>
-                </MainContainer>
-            </div>
+                </div>
+                <AddNewModal />
+            </>
         )
     }
 }

@@ -3,6 +3,8 @@ import theme from './mainTheme.js'
 
 const GlobalStyle = createGlobalStyle`
 
+@import url('https://fonts.googleapis.com/css?family=PT+Sans&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -37,6 +39,7 @@ body {
     }
 
 }
+
 `
 export default GlobalStyle
 

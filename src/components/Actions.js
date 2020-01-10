@@ -6,6 +6,7 @@ import {connect} from 'react-redux'
 import {removeSelected as removeSelectedAction} from '../actions'
 import {selectAll as selectAllAction} from '../actions'
 import {deselectAll as deselectAllAction} from '../actions'
+import {openAddNewModal as openAddNewModalAction} from '../actions'
 import { PropTypes } from 'prop-types'
 
 const ActionsBox = styled.div`
@@ -35,18 +36,16 @@ const Button = styled.button`
     }
 `
 
-const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries}) => {
+const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries, openAddNewModal}) => {
     let j = 0, k = 0, l;
     for (let i of entries) {
         i.selected && j++
-
-
     }
 
     if(showTagEntries.length) {
          l = 0
     }
-    
+
     for (let i of showTagEntries) {
         for (let h = 0; h < i.entries.length; h++) {
             i.entries[h].selected && k++
@@ -54,13 +53,9 @@ const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entrie
         }
     }
 
-    console.log('l:' + l + ' k:' + k + ' j:' + j + ' entries.length:' + entries.length)
-
-
-
     return (
         <ActionsBox>
-            <Button>Add New</Button>
+            <Button onClick={() => openAddNewModal()}>Add New</Button>
             <Button onClick={(entries.length === j || l === k)  ? (() => deselectAll()) : (() => selectAll()) }>
                 {(entries.length === j || l === k) ? 'Deselect' : 'Select'} All
             </Button>
@@ -74,16 +69,13 @@ const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entrie
 const mapDispatchToProps = dispatch => ({
     removeSelected: () => dispatch(removeSelectedAction()),
     selectAll: () => dispatch(selectAllAction()),
-    deselectAll: () => dispatch(deselectAllAction())
+    deselectAll: () => dispatch(deselectAllAction()),
+    openAddNewModal: () => dispatch(openAddNewModalAction())
 })
 
 const mapStateToProps = state => {
     const {showTagEntries, entries} = state
     return {showTagEntries, entries}
-}
-
-Actions.propTypes = {
-    selectedEntries: PropTypes.number
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Actions)

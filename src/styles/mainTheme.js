@@ -10,7 +10,7 @@ const theme = {
     default_button_text_color: '#111',
     header_mobile_height: '60px',
     header_desktop_height: '120px',
-    default_font_family: `'Roboto', 'Arial', sans-serif`,
+    default_font_family: `'PT Sans', 'Roboto', 'Arial', sans-serif`,
 
     gutterWidth: '15px',
 

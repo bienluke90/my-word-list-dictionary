@@ -164,7 +164,8 @@ const initState = {
     entries: [
         ...defaultEntries
     ],
-    showTagEntries: []
+    showTagEntries: [],
+    addNewModalOpened: false,
 }
 
 const mainReducer = (state = initState, action) => {
@@ -340,6 +341,12 @@ const mainReducer = (state = initState, action) => {
                 ...state,
                 entries: changedEntries2.length ? changedEntries2 : state.entries,
                 showTagEntries: changedTagEntries2.length ? changedTagEntries2 : [] 
+            }
+
+        case 'OPEN_ADD_NEW_MODAL':
+            return {
+                ...state,
+                addNewModalOpened: !state.addNewModalOpened
             }
 
         default:
