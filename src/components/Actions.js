@@ -7,9 +7,13 @@ import {removeSelected as removeSelectedAction} from '../actions'
 import {selectAll as selectAllAction} from '../actions'
 import {deselectAll as deselectAllAction} from '../actions'
 import {openAddNewModal as openAddNewModalAction} from '../actions'
+import {expandAll as expandAllAction} from '../actions'
+import {collapseAll as collapseAllAction} from '../actions'
 import { PropTypes } from 'prop-types'
 
 const ActionsBox = styled.div`
+    display: flex;
+    align-items: center;
     background-image: linear-gradient(0deg, rgba(125,125,125,0.75) 20%, rgba(180,180,180,0.75) 100%);
     background-size: 100% 100%;
     width: 100%;
@@ -26,6 +30,8 @@ const Button = styled.button`
     font-size: inherit;
     border: 2px solid ${theme.default_button_text_color};
     ${({inactive}) => inactive && `border: 2px solid ${lighten(0.3, theme.default_button_text_color)}`};
+    height: 4rem;
+    line-height: 2rem;
     border-radius: 3px;
     padding: 8px 12px;
     margin: 5px 5px;
@@ -36,7 +42,9 @@ const Button = styled.button`
     }
 `
 
-const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries, openAddNewModal}) => {
+const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries, openAddNewModal, expandAll, collapseAll}) => {
+
+    // Check how many selected in order to show inactive buttons
     let j = 0, k = 0, l;
     for (let i of entries) {
         i.selected && j++
@@ -53,14 +61,31 @@ const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entrie
         }
     }
 
+    // Check how there are some expanded or/and collapsed
+    let e = 0, te = 0, c = 0, tc = 0
+    for (let i of entries) {
+        i.expanded && e++
+        !i.expanded && c++
+    }
+
+    for (let i of showTagEntries) {
+        for (let h of i.entries) {
+            h.expanded && te++
+            !h.expanded && tc++
+        }
+    }
+
+
+    alert(e + ' ' + te)
+
     return (
         <ActionsBox>
             <Button onClick={() => openAddNewModal()}>Add New</Button>
             <Button onClick={(entries.length === j || l === k)  ? (() => deselectAll()) : (() => selectAll()) }>
                 {(entries.length === j || l === k) ? 'Deselect' : 'Select'} All
             </Button>
-            <Button inactive>Expand</Button>
-            <Button inactive>Collapse</Button>
+            <Button inactive={(c || tc) && !(j || k)} onClick={(j || k) && (() => expandAll())}>Expand</Button>
+            <Button inactive={(!e && !te) && !(j || k)} onClick={(j || k) && (() => collapseAll())}>Collapse</Button>
             <Button inactive={!(j || k)} onClick={(j || k) && (() => removeSelected())}>Delete</Button>
         </ActionsBox>
     )
@@ -70,7 +95,9 @@ const mapDispatchToProps = dispatch => ({
     removeSelected: () => dispatch(removeSelectedAction()),
     selectAll: () => dispatch(selectAllAction()),
     deselectAll: () => dispatch(deselectAllAction()),
-    openAddNewModal: () => dispatch(openAddNewModalAction())
+    openAddNewModal: () => dispatch(openAddNewModalAction()),
+    expandAll: () => dispatch(expandAllAction()),
+    collapseAll: () => dispatch(collapseAllAction()),
 })
 
 const mapStateToProps = state => {

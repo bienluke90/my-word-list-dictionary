@@ -8,7 +8,7 @@ const showTag = (tag) => {
     return {
         type: 'SHOW_TAG',
         payload: {
-            tag: tag
+            tag
         }
     }
 }
@@ -24,7 +24,7 @@ const addEntry = (id, entryTags, entryContents) => {
         type: 'ADD_ENTRY',
         payload: {
             entry: {
-                id: id,
+                id,
                 contents: [...entryContents],
                 tags: [...entryTags],
                 timeAdded: new Date().toLocaleString()
@@ -46,12 +46,23 @@ const removeAll = () => {
 }
 
 
-const selectOne = (data, id) => {
+const selectOne = (selected, id, tag) => {
     return {
         type: 'SELECT_ONE',
         payload: {
-            selected: data,
-            id: id
+            selected,
+            id,
+            tag
+        }
+    }
+}
+
+const expandOne = (expanded, id) => {
+    return {
+        type: 'EXPAND_ONE',
+        payload: {
+            expanded,
+            id
         }
     }
 }
@@ -62,10 +73,35 @@ const selectAll = () => {
     }
 }
 
+const expandAll = () => {
+    return {
+        type: 'EXPAND_ALL'
+    }
+}
+
+const collapseAll = () => {
+    return {
+        type: 'COLLAPSE_ALL'
+    }
+}
+
 const deselectAll = () => {
     return {
         type: 'DESELECT_ALL'
     }
 }
 
-export {showAll, showTag, addEntry, removeAll, removeSelected, selectOne, selectAll, deselectAll, openAddNewModal}
+export {
+     showAll,
+     showTag,
+     addEntry,
+     removeAll,
+     removeSelected,
+     selectOne,
+     expandOne,
+     selectAll,
+     deselectAll,
+     openAddNewModal,
+     expandAll,
+     collapseAll
+}

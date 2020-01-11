@@ -62,7 +62,7 @@ const Form = styled.form`
 
 const ModalHeader = styled.h2`
     width: 100%;
-    padding: ${theme.gutterWidth};
+    padding: ${theme.gutterWidth} 30px;
     background-color: rgba(0, 0, 0, 0.15);
 `
 
@@ -78,7 +78,7 @@ const LabelTitle = styled.div`
     color: #222 !important;
     text-align: center;
     letter-spacing: 1px;
-    padding: 0 20px 20px 5px;
+    padding: 0 20px 20px 10px;
     margin-left: 5px;
     margin-bottom: 3px;
     border-bottom: 1px solid #333;
@@ -135,7 +135,7 @@ const LabelButton = styled.button`
     margin-left: 5px;
     transition: border 0.4s, color 0.4s;
     cursor: pointer;
-    &:hover {
+    &:hover, &:focus, &:active {
         border: 2px solid black;
         color: #000;
     }

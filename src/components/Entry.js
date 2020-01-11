@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import theme from '../styles/mainTheme'
 import {connect} from 'react-redux'
 import {selectOne as selectOneAction} from '../actions'
+import {expandOne as expandOneAction} from '../actions'
+import accepticon from '../assets/accepticon.svg'
+import dropdownicon from '../assets/dropdownicon.svg'
+import collapseicon from '../assets/collapseicon.svg'
 
 const StyledEntry = styled.div`
     display: inline-block;
@@ -21,28 +25,57 @@ const StyledEntry = styled.div`
 `
 
 const StyleAddedAt = styled.small`
-    padding: 5px;
+    display: block;
+    padding: 5px 50px 5px 10px;
+    min-height: 43px;
 `
 
 const StyledParagraph = styled.p`
     width: 100%;
-    
 `
 
 const SelectButton = styled.button`
+    display: block;
     position: absolute;
-    right: 0;
-    top: 0;
-    width: 55px;
-    height: 20px;
-    border: none;
-    border-radius: 3px;
+    right: 10px;
+    top: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 15%;
+    border: 1px solid #555;
+    cursor: pointer;
+    ${({selected}) => selected && `
+        box-shadow: 1px 1px 10px ${theme.special_colors.notify};
+        background-image: url(${accepticon});
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+    `}
+`
+
+const ExpandButton = styled.button`
+    display: block;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 15%;
+    border: 1px solid #555;
+    background-image: url(${dropdownicon});
+    background-repeat: no-repeat;
+    background-size: 25px 25px;
+    background-position: center center;
+    cursor: pointer;
+    ${({active}) => active && `
+        background-image: url(${collapseicon}) !important;
+    `}
 `
 
 const LineType = styled.span`
     display: block;
     background-color: rgba(0, 0, 30, 0.15);
-    padding: 10px 70px 10px 10px;
+    padding: 10px 50px 10px 10px;
     &:nth-child(2n) {
         background-color: rgba(0, 0, 30, 0.25);
     }
@@ -52,17 +85,25 @@ class Entry extends React.Component {
 
     render() {
 
-        const {selectOne, id, selected, timeAdded, expanded, contents} = this.props
-
+        const {selectOne, id, selected, timeAdded, expanded, contents, notByTags, tagged, tag, expandOne} = this.props
         const lineTypes = contents.map((e, i) => <LineType key={i}><b>{e.type}</b>: {e.text}</LineType>),
-            oneLine = (<LineType><b>{contents[0].type}</b>: {contents[0].text.substring(0, 20).concat('...')}</LineType>)
+            oneLine = (<LineType>
+                <b>{contents[0].type}: </b>
+                {contents[0].text.length > 25 ? contents[0].text.substring(0, 30).concat('...') : contents[0].text}
+                <br/>
+            </LineType>)
            
             return (  
                 <StyledEntry selected={selected}>
-                    <StyleAddedAt>Added: {timeAdded.toLocaleString()}</StyleAddedAt> 
+                    <StyleAddedAt>
+                        Added: {timeAdded.toLocaleString()}
+                        <br/>
+                        {notByTags && <span>Tag: <b>{tagged}</b></span>}
+                        <SelectButton selected={selected} onClick={() => selectOne(selected, id, tag)}> </SelectButton>
+                    </StyleAddedAt> 
                     <StyledParagraph>
                         {expanded ? lineTypes : oneLine}
-                        <SelectButton onClick={() => selectOne(selected, id)}>[Select]</SelectButton>
+                        <ExpandButton active={expanded} onClick={() => expandOne(expanded, id)}> </ExpandButton>
                     </StyledParagraph>
                 </StyledEntry>
             )
@@ -71,7 +112,8 @@ class Entry extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    selectOne: (data, id) => dispatch(selectOneAction(data, id))
+    selectOne: (selected, id, inTag) => dispatch(selectOneAction(selected, id, inTag)),
+    expandOne: (expanded, id) => dispatch(expandOneAction(expanded, id)),
 })
 
 

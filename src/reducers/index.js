@@ -2,15 +2,15 @@
 const defaultEntries = [
     {
         id: 0,
-        tags: ["english-polish"],
+        tagged: "english-polish",
         contents: [
             {
                 type: "polish",
-                text: "To jest kiełbasa i ogórki"
+                text: "To jest kiełbasa i ogórki. Musztarda i majonez."
             },
             {
                 type: "english",
-                text: "This is sausage and cucumbers"
+                text: "This is sausage and cucumbers. Mustard and mayonaisse."
             },        
         ],
         timeAdded: new Date(2020, 1, 6, 5, 24, 18),
@@ -19,7 +19,7 @@ const defaultEntries = [
     },
     {
         id: 1,
-        tags: ["english-polish"],
+        tagged: "english-polish",
         contents: [
             {
                 type: "polish",
@@ -36,7 +36,7 @@ const defaultEntries = [
     },
     {
         id: 2,
-        tags: ["english-polish-german"],
+        tagged: "english-polish-german",
         contents: [
             {
                 type: "polish",
@@ -57,7 +57,7 @@ const defaultEntries = [
     },
     {
         id: 3,
-        tags: ["english-polish-german"],
+        tagged: "english-polish-german",
         contents: [
             {
                 type: "polish",
@@ -78,7 +78,7 @@ const defaultEntries = [
     },
     {
         id: 4,
-        tags: ["english-polish-german"],
+        tagged: "english-polish-german",
         contents: [
             {
                 type: "polish",
@@ -99,7 +99,7 @@ const defaultEntries = [
     },
     {
         id: 5,
-        tags: ["english-polish-german"],
+        tagged: "english-polish-german",
         contents: [
             {
                 type: "polish",
@@ -120,7 +120,7 @@ const defaultEntries = [
     },
     {
         id: 6,
-        tags: ["english-polish-german"],
+        tagged: "english-polish-german",
         contents: [
             {
                 type: "polish",
@@ -141,7 +141,7 @@ const defaultEntries = [
     },
     {
         id: 7,
-        tags: ["english-polish"],
+        tagged: "english-polish",
         contents: [
             {
                 type: "polish",
@@ -184,19 +184,21 @@ const mainReducer = (state = initState, action) => {
                 entries: changedEntries3 ? changedEntries3.sort((a, b) => a.id < b.id) : state.entries.sort((a, b) => a.id < b.id)
             }
         case 'SHOW_TAG':
-            let changedEntries4 =[];
+            let unselectedEntries = [];
 
+            // Deselect if some tags are selected
             if (state.showTagEntries.length === 0) {
-                changedEntries4 = state.entries.map(e => { 
+                unselectedEntries = state.entries.map(e => { 
                     e.selected = false
                     return e
                 })
             } else {
-                changedEntries4 = state.entries
+                unselectedEntries = state.entries
             }
 
+            // If tag is NOT DISPLAYED
             if (! state.showTagEntries.filter(e => e.tag === action.payload.tag).length) {
-                const entriesToShow = changedEntries4.filter(e => e.tags.includes(action.payload.tag))
+                const entriesToShow = unselectedEntries.filter(e => e.tagged === action.payload.tag)
                 return {
                     ...state,
                     showTagEntries: [
@@ -207,6 +209,7 @@ const mainReducer = (state = initState, action) => {
                         }
                     ]
                 }
+            // If tag is already being DISPLAYED
             } else {
                 const notWithTag = state.showTagEntries.map(f => {
                     const a = f.entries.map(e => {
@@ -227,7 +230,7 @@ const mainReducer = (state = initState, action) => {
                     showTagEntries: [
                         ...notWithTag
                     ],
-                    entries: notWithTag === 0 ? changedEntries4 : state.entries
+                    entries: notWithTag === 0 ? unselectedEntries : state.entries
                 }
             }
 
@@ -238,7 +241,8 @@ const mainReducer = (state = initState, action) => {
                 everEntry: state.everEntry + 1
             }
         case 'REMOVE_SELECTED':
-            let withRemoved = [], withRemoved2 = []
+            let withRemoved = [], withRemoved2 = [], removeTags = []
+            
             if(state.showTagEntries.length) {
                 withRemoved = state.showTagEntries.map(t => {
                     let returnedTag = t.tag
@@ -249,12 +253,13 @@ const mainReducer = (state = initState, action) => {
                         return e
                     }).filter(e => e !== undefined)
 
-                    if(t.entries.length) {
+                    if(returnedEntries.length) {
                         return {
                             tag: returnedTag,
                             entries: returnedEntries
                         }
                     } else {
+                        removeTags = returnedTag
                         return undefined
                     }
                 }).filter(e => e !== undefined)
@@ -266,6 +271,7 @@ const mainReducer = (state = initState, action) => {
 
             return {
                 ...state,
+                tags: state.tags.filter(t => removeTags !== t),
                 showTagEntries: withRemoved,
                 entries: withRemoved2
             }
@@ -277,17 +283,65 @@ const mainReducer = (state = initState, action) => {
                 selectedEntries: 0,
                 showTagEntries: []
             }
-        case 'SELECT_ONE':
-            const updated = state.entries.map(e => {
-                      if (action.payload.id === e.id) {
-                        e.selected = !action.payload.selected
-                      } 
-                      return e
-                  })
+        case 'EXPAND_ONE': 
+            const updatedExpand = state.entries.map(e => {
+                if (action.payload.id === e.id) {
+                    e.expanded = !action.payload.expanded
+                } 
+                return e
+            })
 
             return {
                 ...state,
-                entries: updated
+                entries: updatedExpand
+            }
+        case 'EXPAND_ALL':
+            const expandedAll = state.entries.map(e => {
+                if(e.selected) {
+                    e.expanded = true
+                }
+                return e
+            })
+            return {
+                ...state,
+                entries: expandedAll
+            }
+        case 'COLLAPSE_ALL':
+            const collapseAll = state.entries.map(e => {
+                if(e.selected) {
+                    e.expanded = false
+                }
+                return e
+            })
+            return {
+                ...state,
+                entries: collapseAll
+            }  
+        case 'SELECT_ONE':
+            let updatedSelectTag = [], updatedSelect = []
+            if (state.showTagEntries.length) {
+                updatedSelectTag = state.showTagEntries.map(t => {
+                    t.entries.map(e => {
+                        if (action.payload.id === e.id && t.tag === action.payload.tag) {
+                            e.selected = !action.payload.selected
+                        }
+                        return e 
+                    })
+                    return t
+                })
+            } else {
+                updatedSelect = state.entries.map(e => {
+                    if (action.payload.id === e.id) {
+                        e.selected = !action.payload.selected
+                    } 
+                    return e
+                })
+            }
+
+            return {
+                ...state,
+                entries: updatedSelect.length ? updatedSelect : state.entries,
+                showTagEntries: updatedSelectTag.length ? updatedSelectTag : state.showTagEntries
             }
         case 'SELECT_ALL':
             let changedTagEntries = [], changedEntries = []
