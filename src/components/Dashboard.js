@@ -27,6 +27,24 @@ const EntryHeading = styled.h2`
 
 class Dashboard extends React.Component {
 
+    state = {
+        scrollPosition: false
+    }
+
+    componentDidMount = () => {
+        window.addEventListener('scroll', this.handleScroll)
+    }
+    componentWillUnmount = () => {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
+
+    handleScroll = () => {
+        const position = window.pageYOffset
+        this.setState({
+            scrollPosition: position
+        }) 
+    }
+
     render() {
         const {entries, showTagEntries} = this.props
 
@@ -51,7 +69,7 @@ class Dashboard extends React.Component {
 
         return (
             <>
-                <Actions />
+                <Actions position={this.state.scrollPosition} />
                 {showTagEntries.length ? null : <AllEntriesHeading>All entries from <u>all tags</u>, sorted chronologically:</AllEntriesHeading>}
                 {showTagEntries.length ? entryList : <EntryWrapper>{entryList}</EntryWrapper> }
             </>

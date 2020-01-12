@@ -5,7 +5,7 @@ const StyledHeader = styled.header`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 999999999;
+    z-index: 999999;
     width: 100%;
     height: ${theme.header_mobile_height};
     background-color: ${theme.default_header_background};
