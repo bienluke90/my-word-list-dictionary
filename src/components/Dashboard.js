@@ -3,6 +3,14 @@ import { connect } from 'react-redux'
 import Actions from './Actions.js'
 import Entry from './Entry.js'
 import styled from 'styled-components'
+import theme from '../styles/mainTheme.js'
+
+const DashboardWrapper = styled.div`
+    position: relative;
+    top: 0;
+    left: 0;
+    padding-top: 60px;
+`
 
 const EntryWrapper = styled.div`
     padding: 10px 20px;
@@ -11,7 +19,7 @@ const EntryWrapper = styled.div`
 const AllEntriesHeading = styled.h1`
     font-weight: normal;
     padding: 10px 30px;
-    margin: 15px 0;
+    margin: 0 0;
     u {
         font-weight: bold;
     }
@@ -27,6 +35,8 @@ const EntryHeading = styled.h2`
 
 class Dashboard extends React.Component {
 
+    timer = 0
+
     state = {
         scrollPosition: false
     }
@@ -38,11 +48,18 @@ class Dashboard extends React.Component {
         window.removeEventListener('scroll', this.handleScroll)
     }
 
-    handleScroll = () => {
-        const position = window.pageYOffset
-        this.setState({
-            scrollPosition: position
-        }) 
+    handleScroll = () => {  
+        if(this.timer) {
+            return
+        }
+        this.timer = setTimeout(() => {
+            const position = window.pageYOffset
+            console.log(position)
+            this.timer = 0
+            this.setState({
+                scrollPosition: position
+            }) 
+        }, 350)
     }
 
     render() {
@@ -55,7 +72,7 @@ class Dashboard extends React.Component {
                 if (t.tag && t.entries.length) {
                     return (
                         <EntryWrapper key={i}>
-                            <EntryHeading>Tag: <u>#{t.tag}</u></EntryHeading>
+                            <EntryHeading>Category: <u>#{t.tag}</u></EntryHeading>
                             <br />
                             {t.entries.map((e, i) => <Entry key={i} tag={t.tag} {...e} /> )}
                             <br />
@@ -68,11 +85,11 @@ class Dashboard extends React.Component {
         }
 
         return (
-            <>
+            <DashboardWrapper>
                 <Actions position={this.state.scrollPosition} />
-                {showTagEntries.length ? null : <AllEntriesHeading>All entries from <u>all tags</u>, sorted chronologically:</AllEntriesHeading>}
+                {showTagEntries.length ? null : <AllEntriesHeading>All entries from <u>all categories</u>, sorted chronologically:</AllEntriesHeading>}
                 {showTagEntries.length ? entryList : <EntryWrapper>{entryList}</EntryWrapper> }
-            </>
+            </DashboardWrapper>
         )
         
     }

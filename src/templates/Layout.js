@@ -102,7 +102,7 @@ class Layout extends React.Component {
                                 </NavIcon>
                                 <NavList navOpened={navOpened}>
                                     <ListItem selected={!showTagEntries.length} onClick={() => showAll()}>
-                                        <b>#ALL TAGS</b>
+                                        <b>#ALL CATEGORIES</b>
                                     </ListItem>
                                     {listItems}
                                 </NavList>

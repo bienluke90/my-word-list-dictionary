@@ -94,7 +94,7 @@ const ListItem = styled.li`
         position: absolute;
         height: 25px;
         width: 25px;
-        border-radius: 50%;
+        border-radius: 4px;
         top: 50%;
         right: 20px;
         border: 1px solid ${theme.default_button_text_color};

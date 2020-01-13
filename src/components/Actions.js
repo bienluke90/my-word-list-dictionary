@@ -17,26 +17,48 @@ import trashicon from '../assets/trashicon.svg'
 import { PropTypes } from 'prop-types'
 
 const ActionsBox = styled.div`
-
+    position: absolute;
+    top: 0;
+    left: 0;
     background-image: linear-gradient(0deg, rgba(125,125,125,0.75) 20%, rgba(180,180,180,0.75) 100%);
     background-size: 100% 100%;
     width: 100%;
     min-height: 50px;
-    padding: 0 ${theme.gutterWidth};
-    ${({position}) => position > parseInt(theme.header_desktop_height) && `
-        position: fixed;
-        left: 50%;
-        top: ${theme.header_mobile_height};
-        z-index: 9999999999999999999999999;
-        transform: translateX(-50%);
-        width: 100%;
-        background-color: ${theme.default_body_background};
-        padding: 0;
+    padding: 0 ${theme.gutterWidth} 5px ${theme.gutterWidth};
 
-    `}
+    @media screen and (max-width: ${parseInt(theme.device.md) - 1 + 'px'}) {
+        ${({position}) => position > parseInt(theme.gutterWidth) + 75 && `
+            position: fixed;
+            left: 50%;
+            top: ${theme.header_mobile_height};
+            z-index: 9999999999999999999999999;
+            transform: translateX(-50%);
+            width: 100%;
+            background-color: ${theme.default_content_background}
+            @media screen and (min-width: ${theme.device.md}) {
+                top: ${theme.header_desktop_height};
+            }
+
+        `}
+    }
     @media screen and (min-width: ${theme.device.md}) {
         display: flex;
         align-items: center;
+        ${({position}) => position > parseInt(theme.gutterWidth) + 50 && `
+            position: fixed;
+            left: 50%;
+            top: ${theme.header_desktop_height};
+            z-index: 9999999999999999999999999;
+            transform: translateX(-50%);
+            width: 100%;
+            background-color: ${theme.default_content_background}
+            @media screen and (min-width: ${theme.device.md}) {
+                max-width: ${theme.device.md};
+            }
+            @media screen and (min-width: ${theme.device.xl}) {
+                max-width: ${theme.device.xl};
+            }
+    `}
     }
 ` 
 
@@ -52,16 +74,23 @@ const Button = styled.button`
     min-height: 4rem;
     line-height: 2rem;
     border-radius: 3px;
-    padding: 8px 12px;
-    margin: 5px 5px;
+    padding: 8px 12px 8px 4rem;
+    margin: 5px 5px 0 5px;
     white-space: nowrap;
-    background-position: 8px 6px;
+    background-position: 6px 6px;
     background-repeat: no-repeat;
+    @media screen and (max-width: ${parseInt(theme.device.sm) - 1 + 'px'}) {
+            text-indent: -1000rem;
+            width: 27px;
+            padding-left: 27px;
+        }
 
     ${({position}) => position > parseInt(theme.header_desktop_height) && `
-        text-indent: -1000rem;
-        width: 20px;
-        padding: 0;
+
+        @media screen and (min-width: ${theme.device.sm}) {
+            width: auto;
+            text-indent: 0;
+        }
     `}
 
     &:hover {
@@ -71,33 +100,27 @@ const Button = styled.button`
 
     ${({alternative}) => alternative && `
         background-position: 6px -69px;
-    `
-    }
+    `}
     ${({inactive}) => inactive && `
         background-position: 6px -69px;
-    `
-    } 
-    ${({type}) => type === 'addnew' && `
+    `} 
+    ${({type}) => type && `
         padding-left: 4rem;
+    `}
+    ${({type}) => type === 'addnew' && `
         background-position: 6px center;
         background-image: url(${plusicon});
-
     `}
     ${({type}) => type === 'selectall' && `
-        padding-left: 4rem;
         background-image: url(${selectallicon});
-
     `}
     ${({type}) => type === 'expand' && `
-        padding-left: 4rem;
         background-image: url(${expandicon});
     `}
     ${({type}) => type === 'collapse' && `
-        padding-left: 4rem;
         background-image: url(${collapseicon});
     `}
     ${({type}) => type === 'delete' && `
-        padding-left: 3.5rem;
         background-image: url(${trashicon});
     `}
 `

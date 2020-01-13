@@ -162,7 +162,7 @@ const initState = {
     tags: ["english-polish", "english-polish-german"],
     everEntry: defaultEntries.length,
     entries: [
-        ...defaultEntries
+        ...defaultEntries.sort((a, b) => a.id < b.id),
     ],
     showTagEntries: [],
     addNewModalOpened: false,

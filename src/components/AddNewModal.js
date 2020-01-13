@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import theme from '../styles/mainTheme.js'
 import cancelicon from '../assets/cancelicon.svg'
+import dropdownicon from '../assets/dropdownicon.svg'
 import {connect} from 'react-redux'
 import {openAddNewModal as openAddNewModalAction} from '../actions'
 
@@ -61,6 +62,9 @@ const Form = styled.form`
 `
 
 const ModalHeader = styled.h2`
+    display: flex;
+    align-items: center;
+
     width: 100%;
     padding: ${theme.gutterWidth} 30px;
     background-color: rgba(0, 0, 0, 0.15);
@@ -69,21 +73,24 @@ const ModalHeader = styled.h2`
 const Label = styled.label`
     display: inline-block;
     width: 100%;
+    margin-bottom: 15px;
 
 `
 
-const LabelTitle = styled.div`
-    font-family: 'Roboto', sans-serif;
+const LabelTitle = styled.p`
     display: inline-block;
     color: #222 !important;
-    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: left;
     letter-spacing: 1px;
-    padding: 0 20px 20px 10px;
+    padding: 0 20px 5px 5px;
     margin-left: 5px;
-    margin-bottom: 3px;
-    border-bottom: 1px solid #333;
+    margin-bottom: 5px;
     width: auto;
     height: 20px;
+    border-bottom: 1px solid #333;
 
     @media screen and (min-width: ${theme.device.sm}) {
         font-size: ${theme.font_size.xs}
@@ -119,6 +126,9 @@ const Input = styled.input`
     }
     @media screen and (min-width: ${theme.device.sm}) {
         width: 30%;
+        ${({longertext}) => longertext && `
+            width: 50%;
+        `}
     }
 `
 
@@ -143,7 +153,6 @@ const LabelButton = styled.button`
 
 const CloseIcon = styled.div`
     display: block;
-    float: right;
     text-indent: -3000rem;
     background-image: url(${cancelicon});
     background-repeat: no-repeat;
@@ -154,43 +163,116 @@ const CloseIcon = styled.div`
     border-radius: 4px;
     width: 40px;
     height: 40px;
-    margin: 0;
+    margin: 0 0 0 auto;
 `
 
 const ErrorMsg = styled.span`
+    display: block;
     color: red;
     font-size: 16px;
+    margin-bottom: 15px;
+`
+
+const Select = styled.select`
+    display: inline-block;
+    width: 70%;
+    height: 3rem;
+    margin: 0 auto 10px auto;
+    border: 2px solid #777;
+    border-radius: 4px;
+    color: black;
+    font-size: 1.7rem;
+    transition: border 0.3s;
+    background-color: white;
+    appearance: none;
+    background-image: url(${dropdownicon});
+    background-position: 98% center;
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    &:focus {
+        border: 2px solid #000;
+    }
+
+    @media screen and (min-width: ${theme.device.sm}) {
+        width: 80%;
+    }
+    @media screen and (min-width: ${theme.device.md}) {
+        width: 50%;
+    }
+    @media screen and (min-width: ${theme.device.sm}) {
+        width: 30%;
+    }
+`
+
+const Pill = styled.div`
+    position: relative;
+    display: inline-block;
+    margin: 0 5px 5px 0;
+    padding: 0 40px 0 10px;
+    background-color: black;
+    color: ${theme.default_content_background};
+    border-radius: 4px;
+    border: 2px solid black;
+`
+
+const PillButton = styled.button`
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 30px;
+    border: none;
+    background-color: ${theme.default_content_background};
+    background-image: url(${cancelicon});
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 20px 20px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    cursor: pointer;
+
 `
 
 class AddNewModal extends React.Component {
 
-    state = {
-        tags: [],
-        contents: {
+    languages = [
+        "English",
+        "German",
+        "Polish",
+        "French",
+        "Spanish",
+        "Russian"
+    ]
 
-        },
+    state = {
+        contents: [],
         tagBeingAdded: '',
         tagBeingAddedError: '',
+        langBeingAdded: this.languages[0],
+        langBeingAddedErrorDuplicate: '',
+        languages: [],
         isOpened: true
     }
 
     errorMsgs = {
-        tagToAdd: 'This field must have at least 3 letters'
+        tagToAdd: 'This field must have at least 3 letters',
+        alreadyAdded: 'This language is already added',
     }
 
     handleTagInputChange = (e) => {
         this.setState({
-            tagBeingAdded: e.target.value
+            tagBeingAdded: e.target.value,
+            tagBeingAddedError: this.state.tagBeingAdded.length < 3 ? this.state.tagBeingAddedError : ''
         })
     }
 
-    handleTagButtonClick = (e) => {
-        e.preventDefault()
+    handleTagInputBlur = () => {
         if (this.state.tagBeingAdded.length > 2) {
-            this.setState((prevState) => ({
-                tagBeingAddedError: '',
-                tags: [...prevState.tags, prevState.tagBeingAdded]
-            }))        
+            this.setState({
+                tagBeingAddedError: ''
+            })        
         } else {
             this.setState({
                 tagBeingAddedError: this.errorMsgs.tagToAdd
@@ -198,37 +280,121 @@ class AddNewModal extends React.Component {
         }
     }
 
-    handleCloseModalButton = () => {
+    handleLanguageSelectChange = (e) => {
         this.setState({
-            isOpened: false,
-            tagBeingAdded: '',
-            tags: [],
-            tagBeingAddedError: ''
+            langBeingAdded: e.target.value,
+            langBeingAddedErrorDuplicate: ''
         })
     }
 
+    handleAddLanguageButton = (e) => {
+        e.preventDefault()
+        if (this.state.languages.includes(this.state.langBeingAdded)) {
+            this.setState({
+                langBeingAddedErrorDuplicate: this.errorMsgs.alreadyAdded
+            })
+            return
+        }
+
+        this.setState({
+            languages: [...this.state.languages, this.state.langBeingAdded],
+            contents: [
+                ...this.state.contents,
+                {
+                    type: e.target.innerText,
+                    text: ''
+                }
+            ]      
+        })
+    }
+
+    handleLangInputChange = (e, which) => {
+        this.setState({
+            contents: [
+                ...this.state.contents.filter(c => c.type !== which),
+                {
+                    type: which,
+                    text: e.target.value
+                }
+            ]
+        })
+    }
+
+    handleLangRemove = (e, which) => {
+        e.preventDefault()
+        this.setState({
+            languages: this.state.languages.filter(l => l !== which),
+            contents: this.state.contents.filter(c => c.type !== which)
+        })
+    }
+
+    handleCloseModalButton = () => {
+        this.setState({
+            contents: [],
+            tagBeingAdded: '',
+            tagBeingAddedError: '',
+            langBeingAdded: this.languages[0],
+            langBeingAddedErrorDuplicate: '',
+            languages: []
+        })
+        this.props.openAddNewModal()
+    }
+
     render() {
-        const {addNewModalOpened, openAddNewModal} = this.props
+        const {addNewModalOpened} = this.props
         return (
             <ModalContainer opened={addNewModalOpened}>
                 <Modal>
-                    <ModalHeader>Add new entry <CloseIcon onClick={() => openAddNewModal()}>Close</CloseIcon> </ModalHeader>
+                    <ModalHeader>Add new entry <CloseIcon onClick={this.handleCloseModalButton}>Close</CloseIcon> </ModalHeader>
                     <Form>
-                        <Label htmlFor="add-new-tag-button">
-                            <LabelTitle>Add tag to entry: </LabelTitle>
+                        <Label htmlFor="add-new-tag-input">
+                            <LabelTitle>Category Name: </LabelTitle>
                             <br />
                             <Input autocomplete="off" 
                                    onChange={this.handleTagInputChange} 
-                                   id="add-new-tag-button" 
+                                   onBlur={this.handleTagInputBlur}
+                                   id="add-new-tag-input"
                                    type="text"
+                                   value={this.state.tagBeingAdded}
                             />
-                            <LabelButton onClick={this.handleTagButtonClick}>Add</LabelButton>
                             <br />
-
-                            {console.log()}
-                            {this.state.tagBeingAddedError.length ? <ErrorMsg>{this.state.tagBeingAddedError}</ErrorMsg> : null}
+                            {this.state.tagBeingAddedError.length ? <ErrorMsg>{this.state.tagBeingAddedError}</ErrorMsg> : null} 
                         </Label>
-
+                        <Label htmlFor="add-new-lang-select">
+                            <LabelTitle>Select languages: </LabelTitle>
+                            <br />
+                            <Select onChange={this.handleLanguageSelectChange} 
+                                    value={this.state.langBeingAdded}
+                                    id="add-new-lang-select"
+                            >
+                                {this.languages.map(l => <option value={l}>{l}</option>)}
+                            </Select>
+                            <LabelButton onClick={this.handleAddLanguageButton}>Add</LabelButton>
+                            <br/>
+                            {this.state.langBeingAddedErrorDuplicate.length ? <ErrorMsg>{this.state.langBeingAddedErrorDuplicate}</ErrorMsg> : null}
+                            {this.state.languages.map(l => 
+                                <Pill>
+                                    {l}
+                                    <PillButton onClick={(e) => this.handleLangRemove(e, l)}> </PillButton>
+                                </Pill>
+                            )}
+                        </Label>
+                        {
+                            this.state.languages.map((l, i) =>
+                                <Label key={i} htmlFor={`add-new-lang-${l}`}>
+                                    <LabelTitle>Word(s) in: {l} {i === 0 ? '(Primary)' : null}</LabelTitle>
+                                    <br />
+                                    <Input autocomplete="off"
+                                        onChange={(e) => this.handleLangInputChange(e, l)} 
+                                        id={`add-new-lang-${l}`}
+                                        type="text"
+                                        value={this.state.contents.filter(c => c.type === l)[0] ? this.state.contents.filter(c => c.type === l)[0].text : ''}
+                                        longertext
+                                    />
+                                    <br />                
+                                </Label>
+                            )
+                        }
                     </Form>
                 </Modal>
             </ModalContainer>     
