@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Actions from './Actions.js'
 import Entry from './Entry.js'
 import styled from 'styled-components'
-import theme from '../styles/mainTheme.js'
 
 const DashboardWrapper = styled.div`
     position: relative;
@@ -54,7 +53,6 @@ class Dashboard extends React.Component {
         }
         this.timer = setTimeout(() => {
             const position = window.pageYOffset
-            console.log(position)
             this.timer = 0
             this.setState({
                 scrollPosition: position

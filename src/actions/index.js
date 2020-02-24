@@ -57,37 +57,41 @@ const selectOne = (selected, id, tag) => {
     }
 }
 
-const expandOne = (expanded, id) => {
-    return {
-        type: 'EXPAND_ONE',
-        payload: {
-            expanded,
-            id
-        }
-    }
-}
-
 const selectAll = () => {
     return {
         type: 'SELECT_ALL'
     }
 }
 
-const expandAll = () => {
+const resetAll = () => {
     return {
-        type: 'EXPAND_ALL'
+        type: 'RESET_ALL'
     }
 }
 
-const collapseAll = () => {
+const flipCard = (whichOne, direction) => {
     return {
-        type: 'COLLAPSE_ALL'
+        type: 'FLIP_CARD',
+        payload: {
+            whichOne,
+            direction
+        }
     }
 }
 
 const deselectAll = () => {
     return {
         type: 'DESELECT_ALL'
+    }
+}
+
+const addNewEntry = (contents, tag) => {
+    return {
+        type: 'ADD_NEW_ENTRY',
+        payload: {
+            contents,
+            tag
+        }
     }
 }
 
@@ -98,10 +102,10 @@ export {
      removeAll,
      removeSelected,
      selectOne,
-     expandOne,
      selectAll,
      deselectAll,
      openAddNewModal,
-     expandAll,
-     collapseAll
+     flipCard,
+     resetAll,
+     addNewEntry
 }

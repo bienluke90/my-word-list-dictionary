@@ -5,6 +5,7 @@ import cancelicon from '../assets/cancelicon.svg'
 import dropdownicon from '../assets/dropdownicon.svg'
 import {connect} from 'react-redux'
 import {openAddNewModal as openAddNewModalAction} from '../actions'
+import {addNewEntry as addNewEntryAction} from '../actions'
 
 
 const ModalContainer = styled.div`
@@ -64,7 +65,6 @@ const Form = styled.form`
 const ModalHeader = styled.h2`
     display: flex;
     align-items: center;
-
     width: 100%;
     padding: ${theme.gutterWidth} 30px;
     background-color: rgba(0, 0, 0, 0.15);
@@ -80,26 +80,23 @@ const Label = styled.label`
 const LabelTitle = styled.p`
     display: inline-block;
     color: #222 !important;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.2rem;
     font-weight: bold;
     text-align: left;
     letter-spacing: 1px;
-    padding: 0 20px 5px 5px;
+    padding: 0 20px 5px 0;
     margin-left: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 0;
     width: auto;
     height: 20px;
-    border-bottom: 1px solid #333;
 
     @media screen and (min-width: ${theme.device.sm}) {
-        font-size: ${theme.font_size.xs}
+        font-size: 12px;
     }
     @media screen and (min-width: ${theme.device.md}) {
-        font-size: ${theme.font_size.sm}
+        font-size: 13px;
     }
     @media screen and (min-width: ${theme.device.xl}) {
-        font-size: ${theme.font_size.sm}
+        font-size: 15px;
     }
 `
 
@@ -142,7 +139,7 @@ const LabelButton = styled.button`
     height: 3rem;
     padding: 0 1rem;
     font-size: 1.6rem;
-    margin-left: 5px;
+    margin-right: 5px;
     transition: border 0.4s, color 0.4s;
     cursor: pointer;
     &:hover, &:focus, &:active {
@@ -177,7 +174,7 @@ const Select = styled.select`
     display: inline-block;
     width: 70%;
     height: 3rem;
-    margin: 0 auto 10px auto;
+    margin: 0 10px 10px 0;
     border: 2px solid #777;
     border-radius: 4px;
     color: black;
@@ -209,12 +206,16 @@ const Select = styled.select`
 const Pill = styled.div`
     position: relative;
     display: inline-block;
+    font-size: 14px;
     margin: 0 5px 5px 0;
     padding: 0 40px 0 10px;
     background-color: black;
     color: ${theme.default_content_background};
     border-radius: 4px;
     border: 2px solid black;
+    @media screen and (min-width: ${theme.device.xl}) {
+        font-size: 16px;
+    }
 `
 
 const PillButton = styled.button`
@@ -228,10 +229,13 @@ const PillButton = styled.button`
     background-image: url(${cancelicon});
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: 20px 20px;
+    background-size: 12px 12px;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
     cursor: pointer;
+    @media screen and (min-width: ${theme.device.md}) {
+        background-size: 15px 15px;
+    }
 
 `
 
@@ -252,6 +256,7 @@ class AddNewModal extends React.Component {
         tagBeingAddedError: '',
         langBeingAdded: this.languages[0],
         langBeingAddedErrorDuplicate: '',
+        notFilledUpError: '',
         languages: [],
         isOpened: true
     }
@@ -259,6 +264,7 @@ class AddNewModal extends React.Component {
     errorMsgs = {
         tagToAdd: 'This field must have at least 3 letters',
         alreadyAdded: 'This language is already added',
+        notFilledTranslations: 'All language fields must be filled'
     }
 
     handleTagInputChange = (e) => {
@@ -272,11 +278,13 @@ class AddNewModal extends React.Component {
         if (this.state.tagBeingAdded.length > 2) {
             this.setState({
                 tagBeingAddedError: ''
-            })        
+            }) 
+            return true       
         } else {
             this.setState({
                 tagBeingAddedError: this.errorMsgs.tagToAdd
             })  
+            return null
         }
     }
 
@@ -288,6 +296,9 @@ class AddNewModal extends React.Component {
     }
 
     handleAddLanguageButton = (e) => {
+        const select = document.getElementById('add-new-lang-select'),
+              strSel = select.options[select.selectedIndex].value
+
         e.preventDefault()
         if (this.state.languages.includes(this.state.langBeingAdded)) {
             this.setState({
@@ -295,13 +306,13 @@ class AddNewModal extends React.Component {
             })
             return
         }
-
+        
         this.setState({
             languages: [...this.state.languages, this.state.langBeingAdded],
             contents: [
                 ...this.state.contents,
                 {
-                    type: e.target.innerText,
+                    type: strSel,
                     text: ''
                 }
             ]      
@@ -328,6 +339,33 @@ class AddNewModal extends React.Component {
         })
     }
 
+    handleAddEntryButton = (e) => {
+        e.preventDefault()
+        if (!this.handleTagInputBlur()) {
+            return null
+        }
+        const filledContents = this.state.contents.filter(e => e && e.text).length === this.state.contents.length
+        if (filledContents) {
+            this.props.addNewEntry(this.state.contents, this.state.tagBeingAdded)
+            this.setState({
+                contents: [],
+                tagBeingAdded: '',
+                tagBeingAddedError: '',
+                langBeingAdded: this.languages[0],
+                langBeingAddedErrorDuplicate: '',
+                notFilledUpError: '',
+                languages: [],
+                isOpened: false
+            })
+        }
+        if (!filledContents) {
+            this.setState({
+                notFilledUpError: this.errorMsgs.notFilledTranslations
+            })
+        }
+       
+    }
+
     handleCloseModalButton = () => {
         this.setState({
             contents: [],
@@ -335,6 +373,7 @@ class AddNewModal extends React.Component {
             tagBeingAddedError: '',
             langBeingAdded: this.languages[0],
             langBeingAddedErrorDuplicate: '',
+            notFilledUpError: '',
             languages: []
         })
         this.props.openAddNewModal()
@@ -367,13 +406,13 @@ class AddNewModal extends React.Component {
                                     value={this.state.langBeingAdded}
                                     id="add-new-lang-select"
                             >
-                                {this.languages.map(l => <option value={l}>{l}</option>)}
+                                {this.languages.map((l, i) => <option key={i} value={l}>{l}</option>)}
                             </Select>
                             <LabelButton onClick={this.handleAddLanguageButton}>Add</LabelButton>
                             <br/>
                             {this.state.langBeingAddedErrorDuplicate.length ? <ErrorMsg>{this.state.langBeingAddedErrorDuplicate}</ErrorMsg> : null}
-                            {this.state.languages.map(l => 
-                                <Pill>
+                            {this.state.languages.map((l, i) => 
+                                <Pill key={i}>
                                     {l}
                                     <PillButton onClick={(e) => this.handleLangRemove(e, l)}> </PillButton>
                                 </Pill>
@@ -393,8 +432,14 @@ class AddNewModal extends React.Component {
                                     />
                                     <br />                
                                 </Label>
-                            )
+                        )}
+                        {
+                            this.state.languages.length >= 2 ? 
+                                <LabelButton onClick={this.handleAddEntryButton}>Add</LabelButton> : null
                         }
+                        { 
+                            this.state.notFilledUpError.length ? <ErrorMsg>{this.state.notFilledUpError}</ErrorMsg> : null 
+                        }    
                     </Form>
                 </Modal>
             </ModalContainer>     
@@ -408,7 +453,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    openAddNewModal: () => dispatch(openAddNewModalAction())
+    openAddNewModal: () => dispatch(openAddNewModalAction()),
+    addNewEntry: (contents, tag) => dispatch(addNewEntryAction(contents, tag))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewModal)

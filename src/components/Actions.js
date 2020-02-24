@@ -3,16 +3,14 @@ import styled from 'styled-components'
 import theme from '../styles/mainTheme.js'
 import {lighten} from 'polished'
 import {connect} from 'react-redux'
-import {removeSelected as removeSelectedAction, showTag} from '../actions'
+import {removeSelected as removeSelectedAction} from '../actions'
 import {selectAll as selectAllAction} from '../actions'
 import {deselectAll as deselectAllAction} from '../actions'
 import {openAddNewModal as openAddNewModalAction} from '../actions'
-import {expandAll as expandAllAction} from '../actions'
-import {collapseAll as collapseAllAction} from '../actions'
+import {resetAll as resetAllAction} from '../actions'
 import plusicon from '../assets/plusicon.svg'
 import selectallicon from '../assets/selectallicon.svg'
-import expandicon from '../assets/expandicon.svg'
-import collapseicon from '../assets/collapse-icon.svg'
+import reseticon from '../assets/reset-icon.svg'
 import trashicon from '../assets/trashicon.svg'
 import { PropTypes } from 'prop-types'
 
@@ -114,56 +112,37 @@ const Button = styled.button`
     ${({type}) => type === 'selectall' && `
         background-image: url(${selectallicon});
     `}
-    ${({type}) => type === 'expand' && `
-        background-image: url(${expandicon});
-    `}
-    ${({type}) => type === 'collapse' && `
-        background-image: url(${collapseicon});
+    ${({type}) => type === 'reset' && `
+        background-image: url(${reseticon});
     `}
     ${({type}) => type === 'delete' && `
         background-image: url(${trashicon});
     `}
 `
 
-const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries, openAddNewModal, expandAll, collapseAll, position}) => {
+const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entries, openAddNewModal, resetAll, position}) => {
 
     // Check how many selected in order to show inactive buttons
     let j = 0, k = 0, l,
-        e = 0, te = 0, c = 0, tc = 0, inactiveExpand, inactiveCollapse
-
-
+        e = 0, c = 0, inactiveReset = true
 
     if(showTagEntries.length) {
          l = 0
         for (let i of showTagEntries) {
             for (let h = 0; h < i.entries.length; h++) {
                 i.entries[h].selected && k++
+                i.entries[h].contentShowed && i.entries[h].selected && e++
                 l++
             }
         }
     } else {
         for (let i of entries) {
             i.selected && j++
+            i.contentShowed && i.selected && c++
         }        
     }
 
-    // Check how many is expanded or/and collapsed  
-    if (!showTagEntries.length) {
-        for (let i of entries) {
-            i.expanded && i.selected && e++
-            !i.expanded && i.selected && c++
-        }
-    } else {
-        for (let i of showTagEntries) {
-            for (let h of i.entries) {
-                h.expanded && h.selected && te++
-                !h.expanded && h.selected && tc++
-            }
-        }
-    }
-
-    inactiveExpand = !(c || tc)
-    inactiveCollapse = !(e || te)
+    inactiveReset = !(e || c)
 
     return (
         <ActionsBox position={position}>
@@ -174,9 +153,8 @@ const Actions = ({showTagEntries, removeSelected, selectAll, deselectAll, entrie
             >
                 {(entries.length === j || l === k) ? 'Deselect' : 'Select'} All
             </Button>
-            <Button position={position} type="expand" inactive={inactiveExpand} onClick={!inactiveExpand && (() => expandAll())}>Expand</Button>
-            <Button position={position} type="collapse" inactive={inactiveCollapse} onClick={!inactiveCollapse && (() => collapseAll())}>Collapse</Button>
-            <Button position={position} type="delete" inactive={!(j || k)} onClick={(j || k) && (() => removeSelected())}>Delete</Button>
+            <Button position={position} type="reset" inactive={inactiveReset} onClick={!inactiveReset ? () => resetAll() : null}>Reset</Button>
+            <Button position={position} type="delete" inactive={!(j || k)} onClick={(j || k) ? () => removeSelected() : null}>Delete</Button>
         </ActionsBox>
     )
 }
@@ -186,8 +164,7 @@ const mapDispatchToProps = dispatch => ({
     selectAll: () => dispatch(selectAllAction()),
     deselectAll: () => dispatch(deselectAllAction()),
     openAddNewModal: () => dispatch(openAddNewModalAction()),
-    expandAll: () => dispatch(expandAllAction()),
-    collapseAll: () => dispatch(collapseAllAction()),
+    resetAll: () => dispatch(resetAllAction()),
 })
 
 const mapStateToProps = state => {

@@ -6,16 +6,16 @@ const defaultEntries = [
         contents: [
             {
                 type: "polish",
-                text: "To jest kiełbasa i ogórki. Musztarda i majonez."
+                text: "Musztarda i majonez."
             },
             {
                 type: "english",
-                text: "This is sausage and cucumbers. Mustard and mayonaisse."
+                text: "Mustard and mayonaisse."
             },        
         ],
         timeAdded: new Date(2020, 1, 6, 5, 24, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 1,
@@ -32,7 +32,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 6, 5, 34, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 2,
@@ -53,7 +53,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 6, 5, 42, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 3,
@@ -74,7 +74,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 6, 6, 32, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 4,
@@ -95,7 +95,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 23, 6, 32, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 5,
@@ -116,7 +116,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 16, 6, 32, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 6,
@@ -137,7 +137,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 1, 8, 6, 32, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
     {
         id: 7,
@@ -154,7 +154,7 @@ const defaultEntries = [
         ],
         timeAdded: new Date(2020, 2, 6, 5, 34, 18),
         selected: false,
-        expanded: false
+        contentShowed: 0
     },
 ]
 
@@ -283,40 +283,35 @@ const mainReducer = (state = initState, action) => {
                 selectedEntries: 0,
                 showTagEntries: []
             }
-        case 'EXPAND_ONE': 
-            const updatedExpand = state.entries.map(e => {
-                if (action.payload.id === e.id) {
-                    e.expanded = !action.payload.expanded
-                } 
+        case 'RESET_ALL':
+            const resetAll = state.entries.map(e => {
+                if(e.selected) {
+                    e.contentShowed = 0
+                }
+                return e
+            })
+            return {
+                ...state,
+                entries: resetAll
+            } 
+        case 'FLIP_CARD':
+            const entriesWithFlipped = state.entries.map(e => {
+                console.log()
+                if (e.id === action.payload.whichOne) {
+                    if((e.contents.length === 0 && action.payload.direction < 0) || 
+                       (e.contents.length - 1 === e.contentShowed && action.payload.direction > 0)) {
+                            return e
+                    }     
+                    e.contentShowed = e.contentShowed + action.payload.direction
+                }
                 return e
             })
 
             return {
                 ...state,
-                entries: updatedExpand
+                entries: entriesWithFlipped
             }
-        case 'EXPAND_ALL':
-            const expandedAll = state.entries.map(e => {
-                if(e.selected) {
-                    e.expanded = true
-                }
-                return e
-            })
-            return {
-                ...state,
-                entries: expandedAll
-            }
-        case 'COLLAPSE_ALL':
-            const collapseAll = state.entries.map(e => {
-                if(e.selected) {
-                    e.expanded = false
-                }
-                return e
-            })
-            return {
-                ...state,
-                entries: collapseAll
-            }  
+
         case 'SELECT_ONE':
             let updatedSelectTag = [], updatedSelect = []
             if (state.showTagEntries.length) {
@@ -401,6 +396,23 @@ const mainReducer = (state = initState, action) => {
             return {
                 ...state,
                 addNewModalOpened: !state.addNewModalOpened
+            }
+
+        case 'ADD_NEW_ENTRY':
+            const newEntry = {
+                id: state.everEntry,
+                tagged: action.payload.tag,
+                contents: action.payload.contents,
+                timeAdded: new Date(),
+                selected: false,
+                contentShowed: 0
+            }
+            
+            return {
+                ...state,
+                tags: state.tags.includes(action.payload.tag) ? state.tags : [...state.tags, action.payload.tag],
+                everEntry: state.everEntry + 1,
+                entries: [...state.entries, newEntry]
             }
 
         default:

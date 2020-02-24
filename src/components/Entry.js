@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import theme from '../styles/mainTheme'
 import {connect} from 'react-redux'
 import {selectOne as selectOneAction} from '../actions'
-import {expandOne as expandOneAction} from '../actions'
+import {flipCard as flipCardAction} from '../actions'
 import accepticon from '../assets/accepticon.svg'
-import dropdownicon from '../assets/dropdownicon.svg'
-import collapseicon from '../assets/collapseicon.svg'
+import lefticon from '../assets/left-icon.svg'
+import righticon from '../assets/right-icon.svg'
 
 const StyledEntry = styled.div`
     display: inline-block;
@@ -15,6 +15,7 @@ const StyledEntry = styled.div`
     width: calc(100% - 15px);
     border: 2px solid ${theme.default_body_text_color};
     border-radius: 4px;
+    outline: 0 none !important;
     ${({selected}) => selected && `box-shadow: 1px 1px 15px ${theme.special_colors.notify}`}
     @media screen and (min-width: ${theme.device.sm}) {
         width: calc(50% - 20px);
@@ -26,8 +27,12 @@ const StyledEntry = styled.div`
 
 const StyleAddedAt = styled.small`
     display: block;
-    padding: 5px 50px 5px 10px;
-    min-height: 43px;
+    font-size: 15px;
+    color: #ddd;
+    text-align: center;
+    padding: 5px 30px 5px 30px;
+    min-height: 27px;
+    background-color: rgba(0, 0, 10, 0.65);
 `
 
 const StyledParagraph = styled.p`
@@ -38,9 +43,9 @@ const SelectButton = styled.button`
     display: block;
     position: absolute;
     right: 10px;
-    top: 10px;
-    width: 25px;
-    height: 25px;
+    bottom: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 15%;
     border: 1px solid #555;
     cursor: pointer;
@@ -53,67 +58,92 @@ const SelectButton = styled.button`
     `}
 `
 
-const ExpandButton = styled.button`
+const CardType = styled.span`
     display: block;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    width: 25px;
-    height: 25px;
-    border-radius: 15%;
-    border: 1px solid #555;
-    background-image: url(${dropdownicon});
-    background-repeat: no-repeat;
-    background-size: 25px 25px;
-    background-position: center center;
-    cursor: pointer;
-    ${({active}) => active && `
-        background-image: url(${collapseicon}) !important;
-    `}
+    position: relative;
+    text-align: center;
+    font-size: 28px;
+    padding: 10px 40px 20px 40px;
+    background-color: #eee;
+    b {
+       font-size: 16px;
+       text-transform: capitalize;
+       text-decoration: underline;
+    }
 `
 
-const LineType = styled.span`
-    display: block;
-    background-color: rgba(0, 0, 30, 0.15);
-    padding: 10px 50px 10px 10px;
-    &:nth-child(2n) {
-        background-color: rgba(0, 0, 30, 0.25);
+const FlipButton = styled.button`
+    position: absolute;
+    top: 0;
+    width: 35px;
+    height: 100%;
+    border: 0;
+    background-color: transparent;
+    box-shadow: 0 0 20px 5px rgba(125, 125, 140, 0.12) inset;
+    &:nth-of-type(1) {
+        left: 0;
     }
+    &:nth-of-type(2) {
+        right: 0;
+    }   
+    &:active, &:focus {
+        outline: 0;
+    }
+    ${({left, right}) => (left || right ) && `
+        position: absolute;
+        background-size: 100% 100%;
+        background-repeat: no-repeat; 
+        cursor: pointer;  
+    `}
+    ${({right}) => right && `
+        right: 0;
+        background-position: bottom center;
+        background-image: url(${righticon});
+        box-shadow: -10px 0 20px 5px rgba(125, 125, 140, 0.42) inset;
+        
+        `}
+    ${({left}) => left && `
+        left: 0;
+        background-position: top center;
+        background-image: url(${lefticon});
+        box-shadow: 10px 0 20px 5px rgba(125, 125, 140, 0.42) inset;
+    `}
+
 `
 
 class Entry extends React.Component {
 
     render() {
 
-        const {selectOne, id, selected, timeAdded, expanded, contents, notByTags, tagged, tag, expandOne} = this.props
-        const lineTypes = contents.map((e, i) => <LineType key={i}><b>{e.type}</b>: {e.text}</LineType>),
-            oneLine = (<LineType>
-                <b>{contents[0].type}: </b>
-                {contents[0].text.length > 25 ? contents[0].text.substring(0, 30).concat('...') : contents[0].text}
-                <br/>
-            </LineType>)
-           
-            return (  
-                <StyledEntry selected={selected}>
-                    <StyleAddedAt>
-                        Added: {timeAdded.toLocaleString()}
+        const {selectOne, id, selected, timeAdded, contents, notByTags, tagged, tag, contentShowed, flipCard} = this.props
+        const card = <CardType>
+                        <b>{contents[contentShowed].type}: </b>
                         <br/>
-                        {notByTags && <span>Tag: <b>{tagged}</b></span>}
-                        <SelectButton selected={selected} onClick={() => selectOne(selected, id, tag)}> </SelectButton>
-                    </StyleAddedAt> 
-                    <StyledParagraph>
-                        {expanded ? lineTypes : oneLine}
-                        <ExpandButton active={expanded} onClick={() => expandOne(expanded, id)}> </ExpandButton>
-                    </StyledParagraph>
-                </StyledEntry>
-            )
+                        {contents[contentShowed].text}
+                        <FlipButton left={contentShowed !== 0} onClick={contentShowed !== 0 ? () => flipCard(id, -1) : null}></FlipButton>
+                        <FlipButton right={contentShowed !== contents.length - 1} onClick={contentShowed !== contents.length - 1 ? () => flipCard(id, 1) : null}></FlipButton>
+                     </CardType>
+
+        return (  
+            <StyledEntry selected={selected}>
+                <StyledParagraph>
+                    {card}
+                </StyledParagraph>
+                <StyleAddedAt>
+                    Added: {timeAdded.toLocaleString()} 
+                    <br/>   
+                    <span> <b>Category:</b> {tagged}</span>
+                    <SelectButton selected={selected} onClick={() => selectOne(selected, id, tag)}> </SelectButton>
+                </StyleAddedAt> 
+            </StyledEntry>
+        )
 
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     selectOne: (selected, id, inTag) => dispatch(selectOneAction(selected, id, inTag)),
-    expandOne: (expanded, id) => dispatch(expandOneAction(expanded, id)),
+    flipCard: (whichOne, direction) => dispatch(flipCardAction(whichOne, direction))
 })
 
 
