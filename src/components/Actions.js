@@ -172,4 +172,15 @@ const mapStateToProps = state => {
     return {showTagEntries, entries}
 }
 
+ActionsBox.propTypes = {
+    position: PropTypes.bool
+}
+
+Button.propTypes = {
+    inactive: PropTypes.bool,
+    position: PropTypes.bool,
+    type: PropTypes.bool,
+    alternative: PropTypes.bool
+}
+
 export default connect(mapStateToProps, mapDispatchToProps)(Actions)

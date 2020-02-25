@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import theme from '../styles/mainTheme.js'
 import bookIcon from '../assets/book-icon.png'
-import {LogoImage, LogoTitle} from './LogoImageTitle.js'
-import StyledHeader from './Header.js'
-import {StyledNavigation, NavIcon, NavList, ListItem} from './HeaderNavigation.js'
+import {LogoImage, LogoTitle} from '../components/LogoImageTitle.js'
+import {StyledNavigation, NavIcon, NavList, ListItem} from '../components/HeaderNavigation.js'
+import StyledHeader from '../components/Header.js'
+import AddNewModal from '../components/AddNewModal.js'
 import Dashboard from '../components/Dashboard.js'
 import {connect} from 'react-redux'
 import {showAll as showAllAction} from '../actions'
 import {showTag as showTagAction} from '../actions'
 import {deselectAll as deselectAllAction} from '../actions'
-import AddNewModal from '../components/AddNewModal.js'
 
 const MainContainer = styled.div`
     display: flex;
@@ -131,5 +132,9 @@ const mapDispatchToProps = dispatch => ({
     showTag: (tag) => dispatch(showTagAction(tag)),
     deselectAll: () => dispatch(deselectAllAction())
 })
+
+MainContent.propTypes = {
+    navOpened: PropTypes.bool.isRequired
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout)

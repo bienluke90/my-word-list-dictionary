@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import theme from '../styles/mainTheme'
 import {connect} from 'react-redux'
 import {selectOne as selectOneAction} from '../actions'
@@ -115,7 +116,7 @@ class Entry extends React.Component {
 
     render() {
 
-        const {selectOne, id, selected, timeAdded, contents, notByTags, tagged, tag, contentShowed, flipCard} = this.props
+        const {selectOne, id, selected, timeAdded, contents, tagged, tag, contentShowed, flipCard} = this.props
         const card = <CardType>
                         <b>{contents[contentShowed].type}: </b>
                         <br/>
@@ -146,5 +147,34 @@ const mapDispatchToProps = dispatch => ({
     flipCard: (whichOne, direction) => dispatch(flipCardAction(whichOne, direction))
 })
 
+
+Entry.propTypes = {
+    navOpened: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
+    selectOne: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+    selected: PropTypes.bool.isRequired,
+    timeAdded: PropTypes.string.isRequired,
+    contents: PropTypes.array.isRequired,
+    tagged: PropTypes.string.isRequired,
+    tag: PropTypes.string.isRequired,
+    contentShowed: PropTypes.number.isRequired,
+    flipCard: PropTypes.func.isRequired
+}
+
+FlipButton.propTypes = {
+    left: PropTypes.bool,
+    right: PropTypes.bool,
+    onClick: PropTypes.func
+}
+
+StyledEntry.propTypes = {
+    selected: PropTypes.bool
+}
+
+SelectButton.propTypes = {
+    selected: PropTypes.bool,
+    onClick: PropTypes.func
+}
 
 export default connect(null, mapDispatchToProps)(Entry)

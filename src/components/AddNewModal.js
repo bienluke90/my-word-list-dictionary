@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import theme from '../styles/mainTheme.js'
 import cancelicon from '../assets/cancelicon.svg'
 import dropdownicon from '../assets/dropdownicon.svg'
@@ -383,6 +384,8 @@ class AddNewModal extends React.Component {
 
     render() {
         const {addNewModalOpened} = this.props
+        const {tagBeingAdded, tagBeingAddedError, langBeingAdded, langBeingAddedErrorDuplicate,
+               languages, contents, notFilledUpError} = this.state
         return (
             <ModalContainer opened={addNewModalOpened}>
                 <Modal>
@@ -396,24 +399,24 @@ class AddNewModal extends React.Component {
                                    onBlur={this.handleTagInputBlur}
                                    id="add-new-tag-input"
                                    type="text"
-                                   value={this.state.tagBeingAdded}
+                                   value={tagBeingAdded}
                             />
                             <br />
-                            {this.state.tagBeingAddedError.length ? <ErrorMsg>{this.state.tagBeingAddedError}</ErrorMsg> : null} 
+                            {tagBeingAddedError.length ? <ErrorMsg>{tagBeingAddedError}</ErrorMsg> : null} 
                         </Label>
                         <Label htmlFor="add-new-lang-select">
                             <LabelTitle>Select languages: </LabelTitle>
                             <br />
                             <Select onChange={this.handleLanguageSelectChange} 
-                                    value={this.state.langBeingAdded}
+                                    value={langBeingAdded}
                                     id="add-new-lang-select"
                             >
                                 {this.languages.map((l, i) => <option key={i} value={l}>{l}</option>)}
                             </Select>
                             <LabelButton onClick={this.handleAddLanguageButton}>Add</LabelButton>
                             <br/>
-                            {this.state.langBeingAddedErrorDuplicate.length ? <ErrorMsg>{this.state.langBeingAddedErrorDuplicate}</ErrorMsg> : null}
-                            {this.state.languages.map((l, i) => 
+                            {langBeingAddedErrorDuplicate.length ? <ErrorMsg>{langBeingAddedErrorDuplicate}</ErrorMsg> : null}
+                            {languages.map((l, i) => 
                                 <Pill key={i}>
                                     {l}
                                     <PillButton onClick={(e) => this.handleLangRemove(e, l)}> </PillButton>
@@ -421,7 +424,7 @@ class AddNewModal extends React.Component {
                             )}
                         </Label>
                         {
-                            this.state.languages.map((l, i) =>
+                            languages.map((l, i) =>
                                 <Label key={i} htmlFor={`add-new-lang-${l}`}>
                                     <LabelTitle>Word(s) in: {l} {i === 0 ? '(Primary)' : null}</LabelTitle>
                                     <br />
@@ -429,18 +432,18 @@ class AddNewModal extends React.Component {
                                         onChange={(e) => this.handleLangInputChange(e, l)} 
                                         id={`add-new-lang-${l}`}
                                         type="text"
-                                        value={this.state.contents.filter(c => c.type === l)[0] ? this.state.contents.filter(c => c.type === l)[0].text : ''}
+                                        value={contents.filter(c => c.type === l)[0] ? contents.filter(c => c.type === l)[0].text : ''}
                                         longertext
                                     />
                                     <br />                
                                 </Label>
                         )}
                         {
-                            this.state.languages.length >= 2 ? 
+                            languages.length >= 2 ? 
                                 <LabelButton onClick={this.handleAddEntryButton}>Add</LabelButton> : null
                         }
                         { 
-                            this.state.notFilledUpError.length ? <ErrorMsg>{this.state.notFilledUpError}</ErrorMsg> : null 
+                            notFilledUpError.length ? <ErrorMsg>{notFilledUpError}</ErrorMsg> : null 
                         }    
                     </Form>
                 </Modal>
@@ -458,5 +461,23 @@ const mapDispatchToProps = dispatch => ({
     openAddNewModal: () => dispatch(openAddNewModalAction()),
     addNewEntry: (contents, tag) => dispatch(addNewEntryAction(contents, tag))
 })
+
+ModalContainer.propTypes = {
+    opened: PropTypes.bool
+}
+
+Input.propTypes = {
+    longertext: PropTypes.bool
+}
+
+AddNewModal.propTypes = {
+    addNewModalOpened: PropTypes.bool.isRequired
+}
+
+LabelButton.propTypes = {
+    onClick: PropTypes.func.isRequired
+}
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewModal)

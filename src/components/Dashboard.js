@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Actions from './Actions.js'
 import Entry from './Entry.js'
@@ -80,7 +81,7 @@ class Dashboard extends React.Component {
                 }
             })
         } else if (entries.length) {
-            entryList = entries.map((e, i) => <Entry notByTags key={i} {...e} /> )
+            entryList = entries.map((e, i) => <Entry key={i} {...e} /> )
         }
 
         return (
@@ -97,6 +98,15 @@ class Dashboard extends React.Component {
 const mapStateToProps = state => {
     const {entries, showTagEntries} = state
     return {entries, showTagEntries}
+}
+
+Dashboard.propTypes = {
+    entries: PropTypes.array.isRequired,
+    showTagEntries: PropTypes.array.isRequired
+}
+
+Actions.propTypes = {
+    position: PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(Dashboard)
