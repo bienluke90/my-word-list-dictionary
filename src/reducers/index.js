@@ -2,168 +2,565 @@
 const defaultEntries = [
     {
         id: 0,
-        tagged: "english-polish",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Musztarda i majonez."
+                type: "english",
+                text: "Apple"
             },
             {
-                type: "english",
-                text: "Mustard and mayonaisse."
-            },        
+                type: "german",
+                text: "der Apfel"
+            },     
+            {
+                type: "french",
+                text: "la Pomme"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 6, 5, 24, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 0, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 1,
-        tagged: "english-polish",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Jesteś Bogiem"
+                type: "english",
+                text: "Watermelon"
             },
             {
-                type: "english",
-                text: "You are god"
-            },        
+                type: "german",
+                text: "die Wassermelone"
+            },     
+            {
+                type: "french",
+                text: "la Pastèque"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 6, 5, 34, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 5, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 2,
-        tagged: "english-polish-german",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Jestem dobry"
+                type: "english",
+                text: "Orange"
             },
             {
-                type: "english",
-                text: "You are good"
-            }, 
-            {
                 type: "german",
-                text: "Ich bin gut"
-            }       
+                text: "die Orange"
+            },     
+            {
+                type: "french",
+                text: "l' Orange"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 6, 5, 42, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 10, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 3,
-        tagged: "english-polish-german",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Kocham słodycze"
+                type: "english",
+                text: "Strawberry"
             },
             {
-                type: "english",
-                text: "I love sweets"
-            }, 
-            {
                 type: "german",
-                text: "Ich liebe zucker"
-            }       
+                text: "die Erdbeere"
+            },     
+            {
+                type: "french",
+                text: "la Fraise"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 6, 6, 32, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 15, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 4,
-        tagged: "english-polish-german",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Kocham cię"
+                type: "english",
+                text: "Grape"
             },
             {
-                type: "english",
-                text: "I love you"
-            }, 
-            {
                 type: "german",
-                text: "Ich liebe dich"
-            }       
+                text: "die Traube"
+            },     
+            {
+                type: "french",
+                text: "le Grain de raisin"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 23, 6, 32, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 20, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 5,
-        tagged: "english-polish-german",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Ja jestem"
+                type: "english",
+                text: "Cherry"
             },
             {
-                type: "english",
-                text: "I'm"
-            }, 
-            {
                 type: "german",
-                text: "Ich bin"
-            }       
+                text: "die Kirsche"
+            },     
+            {
+                type: "french",
+                text: "la Cerise"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 16, 6, 32, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 25, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 6,
-        tagged: "english-polish-german",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "On"
+                type: "english",
+                text: "Mango"
             },
             {
-                type: "english",
-                text: "He"
-            }, 
-            {
                 type: "german",
-                text: "Er"
-            }       
+                text: "die Mango"
+            },     
+            {
+                type: "french",
+                text: "la Mangue"
+            },          
         ],
-        timeAdded: new Date(2020, 1, 8, 6, 32, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 30, 0),
         selected: false,
         contentShowed: 0
     },
     {
         id: 7,
-        tagged: "english-polish",
+        tagged: "Fruits",
         contents: [
             {
-                type: "polish",
-                text: "Dobra zupa"
+                type: "english",
+                text: "Nectarine"
             },
             {
-                type: "english",
-                text: "Good soup"
-            },        
+                type: "german",
+                text: "die Nektarine"
+            },     
+            {
+                type: "french",
+                text: "la Nectarine"
+            },          
         ],
-        timeAdded: new Date(2020, 2, 6, 5, 34, 18),
+        timeAdded: new Date(2020, 1, 24, 12, 35, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 8,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Banana"
+            },
+            {
+                type: "german",
+                text: "die Banane"
+            },     
+            {
+                type: "french",
+                text: "la Banane"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 12, 40, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 9,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Pomegranade"
+            },
+            {
+                type: "german",
+                text: "der Granatapfel"
+            },     
+            {
+                type: "french",
+                text: "la Grenade"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 12, 45, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 10,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Raspberry"
+            },
+            {
+                type: "german",
+                text: "die Himbeere"
+            },     
+            {
+                type: "french",
+                text: "la Framboise"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 12, 50, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 11,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Pineapple"
+            },
+            {
+                type: "german",
+                text: "die Ananas"
+            },     
+            {
+                type: "french",
+                text: "l' Ananas"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 12, 55, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 12,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Peach"
+            },
+            {
+                type: "german",
+                text: "die Pfirsich"
+            },     
+            {
+                type: "french",
+                text: "la Pêche"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 13, 0, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 13,
+        tagged: "Fruits",
+        contents: [
+            {
+                type: "english",
+                text: "Blueberry"
+            },
+            {
+                type: "german",
+                text: "die Blaubeere"
+            },     
+            {
+                type: "french",
+                text: "la Myrtille"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 13, 5, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 14,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Corn"
+            },
+            {
+                type: "german",
+                text: "der Mais"
+            },     
+            {
+                type: "french",
+                text: "le Blé"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 0, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 15,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Mushroom"
+            },
+            {
+                type: "german",
+                text: "der Champignon"
+            },     
+            {
+                type: "french",
+                text: "le Champignon"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 5, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 16,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Broccoli"
+            },
+            {
+                type: "german",
+                text: "das Brokkoli"
+            },     
+            {
+                type: "french",
+                text: "le Brocoli"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 10, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 16,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Cucumber"
+            },
+            {
+                type: "german",
+                text: "die Gurke"
+            },     
+            {
+                type: "french",
+                text: "le Concombre"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 15, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 17,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Carrot"
+            },
+            {
+                type: "german",
+                text: "die Karotte"
+            },     
+            {
+                type: "french",
+                text: "la Carotte"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 20, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 18,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Tamato"
+            },
+            {
+                type: "german",
+                text: "die Tomate"
+            },     
+            {
+                type: "french",
+                text: "la Tomate"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 25, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 19,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Pumpkin"
+            },
+            {
+                type: "german",
+                text: "der Kürbis"
+            },     
+            {
+                type: "french",
+                text: "la Citrouille"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 30, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 20,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Cabbage"
+            },
+            {
+                type: "german",
+                text: "der Kohl"
+            },     
+            {
+                type: "french",
+                text: "le Chou"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 35, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 21,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Potato"
+            },
+            {
+                type: "german",
+                text: "die Kartoffel"
+            },     
+            {
+                type: "french",
+                text: "la Patate"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 40, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 22,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Onion"
+            },
+            {
+                type: "german",
+                text: "die Zwiebel"
+            },     
+            {
+                type: "french",
+                text: "l' Oignon"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 45, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 23,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Pepper"
+            },
+            {
+                type: "german",
+                text: "der Pfeffer"
+            },     
+            {
+                type: "french",
+                text: "le Poivre"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 50, 0),
+        selected: false,
+        contentShowed: 0
+    },
+    {
+        id: 24,
+        tagged: "Vegetables",
+        contents: [
+            {
+                type: "english",
+                text: "Beetroot"
+            },
+            {
+                type: "german",
+                text: "die rote Bete"
+            },     
+            {
+                type: "french",
+                text: "la Betterave"
+            },          
+        ],
+        timeAdded: new Date(2020, 1, 24, 14, 55, 0),
         selected: false,
         contentShowed: 0
     },
 ]
 
+const savedEntries = []
+if(localStorage.length) {
+    for(let i = 0; i < localStorage.length; i++) {
+        savedEntries.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
+    }
+}
+
 const initState = {
-    tags: ["english-polish", "english-polish-german"],
+    tags: ["Fruits", "Vegetables"],
     everEntry: defaultEntries.length,
-    entries: [
-        ...defaultEntries.sort((a, b) => a.id < b.id),
-    ],
+    entries: savedEntries.length ?  
+        savedEntries
+        : [...defaultEntries.sort((a, b) => a.id < b.id ? 1 : -1 )],
     showTagEntries: [],
     addNewModalOpened: false,
 }
@@ -241,10 +638,10 @@ const mainReducer = (state = initState, action) => {
                 everEntry: state.everEntry + 1
             }
         case 'REMOVE_SELECTED':
-            let withRemoved = [], withRemoved2 = [], removeTags = []
+            let withRemovedTag = [], withRemoved = [], remainingTags = []
             
             if(state.showTagEntries.length) {
-                withRemoved = state.showTagEntries.map(t => {
+                withRemovedTag = state.showTagEntries.map(t => {
                     let returnedTag = t.tag
                     let returnedEntries = t.entries.map(e => {
                         if (e.selected) {
@@ -258,31 +655,27 @@ const mainReducer = (state = initState, action) => {
                             tag: returnedTag,
                             entries: returnedEntries
                         }
-                    } else {
-                        removeTags = returnedTag
-                        return undefined
                     }
                 }).filter(e => e !== undefined)
             }
 
             if(state.entries.length) {
-                withRemoved2 = state.entries.filter(e => !e.selected)
+                withRemoved = state.entries.filter(e => {
+                    if (e.selected) {
+                        localStorage.removeItem(e.id)
+                    }
+                    return !e.selected
+                })
+                remainingTags = Array.from(new Set(withRemoved.map(e => e.tagged)))
             }
 
             return {
                 ...state,
-                tags: state.tags.filter(t => removeTags !== t),
-                showTagEntries: withRemoved,
-                entries: withRemoved2
+                tags: remainingTags,
+                showTagEntries: withRemovedTag,
+                entries: withRemoved
             }
 
-        case 'REMOVE_ALL':
-            return {
-                ...state,
-                entries: [],
-                selectedEntries: 0,
-                showTagEntries: []
-            }
         case 'RESET_ALL':
             const resetAll = state.entries.map(e => {
                 if(e.selected) {
@@ -407,6 +800,8 @@ const mainReducer = (state = initState, action) => {
                 selected: false,
                 contentShowed: 0
             }
+
+            localStorage.setItem(state.everEntry, JSON.stringify(newEntry))
             
             return {
                 ...state,

@@ -9,6 +9,7 @@ const DashboardWrapper = styled.div`
     top: 0;
     left: 0;
     padding-top: 60px;
+    padding-bottom: 60px;
 `
 
 const EntryWrapper = styled.div`

@@ -346,7 +346,9 @@ class AddNewModal extends React.Component {
         }
         const filledContents = this.state.contents.filter(e => e && e.text).length === this.state.contents.length
         if (filledContents) {
+
             this.props.addNewEntry(this.state.contents, this.state.tagBeingAdded)
+            
             this.setState({
                 contents: [],
                 tagBeingAdded: '',

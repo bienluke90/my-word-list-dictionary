@@ -39,13 +39,6 @@ const removeSelected = () => {
     }
 }
 
-const removeAll = () => {
-    return {
-        type: 'REMOVE_ALL'
-    }
-}
-
-
 const selectOne = (selected, id, tag) => {
     return {
         type: 'SELECT_ONE',
@@ -99,7 +92,6 @@ export {
      showAll,
      showTag,
      addEntry,
-     removeAll,
      removeSelected,
      selectOne,
      selectAll,
