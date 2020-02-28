@@ -97,7 +97,7 @@ class Layout extends React.Component {
                     <StyledHeader>  
                         <MainContainer>
                             <LogoImage src={bookIcon} alt="Dictionary Icon Logo"/>
-                            <LogoTitle> <span>My Word <br />List & Dictionary</span></LogoTitle>
+                            <LogoTitle> <span>My Word <br />List & Fiches</span></LogoTitle>
                             <StyledNavigation>
                                 <NavIcon navOpened={navOpened} onClick={this.handleNavicon}>
                                 </NavIcon>

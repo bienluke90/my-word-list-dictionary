@@ -98,14 +98,14 @@ const FlipButton = styled.button`
     `}
     ${({right}) => right && `
         right: 0;
-        background-position: bottom center;
+        background-position: center center;
         background-image: url(${righticon});
         box-shadow: -10px 0 20px 5px rgba(125, 125, 140, 0.42) inset;
         
         `}
     ${({left}) => left && `
         left: 0;
-        background-position: top center;
+        background-position: center center;
         background-image: url(${lefticon});
         box-shadow: 10px 0 20px 5px rgba(125, 125, 140, 0.42) inset;
     `}
