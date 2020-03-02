@@ -19,20 +19,6 @@ const openAddNewModal = () => {
     }
 }
 
-const addEntry = (id, entryTags, entryContents) => {
-    return {
-        type: 'ADD_ENTRY',
-        payload: {
-            entry: {
-                id,
-                contents: [...entryContents],
-                tags: [...entryTags],
-                timeAdded: new Date().toLocaleString()
-            }
-        }
-    }
-}
-
 const removeSelected = () => {
     return {
         type: 'REMOVE_SELECTED',
@@ -91,7 +77,6 @@ const addNewEntry = (contents, tag) => {
 export {
      showAll,
      showTag,
-     addEntry,
      removeSelected,
      selectOne,
      selectAll,

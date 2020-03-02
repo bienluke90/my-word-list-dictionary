@@ -549,9 +549,16 @@ const defaultEntries = [
 ]
 
 const savedEntries = []
+
 if(localStorage.length) {
     for(let i = 0; i < localStorage.length; i++) {
         savedEntries.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
+    }
+}
+
+if(!savedEntries.length) {
+    for(let i = 0; i < defaultEntries.length; i++) {
+        localStorage.setItem(localStorage.key(i), JSON.stringify(defaultEntries[i]))
     }
 }
 
@@ -631,12 +638,6 @@ const mainReducer = (state = initState, action) => {
                 }
             }
 
-        case 'ADD_ENTRY':
-            return {
-                ...state,
-                entries: [...state.entries, action.payload.entry],
-                everEntry: state.everEntry + 1
-            }
         case 'REMOVE_SELECTED':
             let withRemovedTag = [], withRemoved = [], remainingTags = []
             
