@@ -550,7 +550,7 @@ const defaultEntries = [
 
 const savedEntries = []
 
-if(!savedEntries.length) {
+if(!localStorage.length) {
     for(let i = 0; i < defaultEntries.length; i++) {
         localStorage.setItem(defaultEntries[i].id, JSON.stringify(defaultEntries[i]))
     }
