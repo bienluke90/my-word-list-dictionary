@@ -358,7 +358,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 16,
+        id: 17,
         tagged: "Vegetables",
         contents: [
             {
@@ -379,7 +379,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 17,
+        id: 18,
         tagged: "Vegetables",
         contents: [
             {
@@ -400,7 +400,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 18,
+        id: 19,
         tagged: "Vegetables",
         contents: [
             {
@@ -421,7 +421,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 19,
+        id: 20,
         tagged: "Vegetables",
         contents: [
             {
@@ -442,7 +442,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 20,
+        id: 21,
         tagged: "Vegetables",
         contents: [
             {
@@ -463,7 +463,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 21,
+        id: 22,
         tagged: "Vegetables",
         contents: [
             {
@@ -484,7 +484,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 22,
+        id: 23,
         tagged: "Vegetables",
         contents: [
             {
@@ -505,7 +505,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 23,
+        id: 24,
         tagged: "Vegetables",
         contents: [
             {
@@ -526,7 +526,7 @@ const defaultEntries = [
         contentShowed: 0
     },
     {
-        id: 24,
+        id: 25,
         tagged: "Vegetables",
         contents: [
             {
@@ -550,24 +550,22 @@ const defaultEntries = [
 
 const savedEntries = []
 
+if(!savedEntries.length) {
+    for(let i = 0; i < defaultEntries.length; i++) {
+        localStorage.setItem(defaultEntries[i].id, JSON.stringify(defaultEntries[i]))
+    }
+}
+
 if(localStorage.length) {
     for(let i = 0; i < localStorage.length; i++) {
         savedEntries.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
     }
 }
 
-if(!savedEntries.length) {
-    for(let i = 0; i < defaultEntries.length; i++) {
-        localStorage.setItem(localStorage.key(i), JSON.stringify(defaultEntries[i]))
-    }
-}
-
 const initState = {
     tags: ["Fruits", "Vegetables"],
     everEntry: defaultEntries.length,
-    entries: savedEntries.length ?  
-        savedEntries
-        : [...defaultEntries.sort((a, b) => a.id < b.id ? 1 : -1 )],
+    entries: savedEntries.sort((a, b) => a.id < b.id ? 1 : -1 ),
     showTagEntries: [],
     addNewModalOpened: false,
 }
@@ -797,7 +795,7 @@ const mainReducer = (state = initState, action) => {
                 id: state.everEntry,
                 tagged: action.payload.tag,
                 contents: action.payload.contents,
-                timeAdded: new Date(),
+                timeAdded: new Date().toString(),
                 selected: false,
                 contentShowed: 0
             }
@@ -808,7 +806,7 @@ const mainReducer = (state = initState, action) => {
                 ...state,
                 tags: state.tags.includes(action.payload.tag) ? state.tags : [...state.tags, action.payload.tag],
                 everEntry: state.everEntry + 1,
-                entries: [...state.entries, newEntry]
+                entries: [newEntry, ...state.entries]
             }
 
         default:

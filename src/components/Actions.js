@@ -173,13 +173,13 @@ const mapStateToProps = state => {
 }
 
 ActionsBox.propTypes = {
-    position: PropTypes.bool
+    position: PropTypes.number
 }
 
 Button.propTypes = {
     inactive: PropTypes.bool,
-    position: PropTypes.bool,
-    type: PropTypes.bool,
+    position: PropTypes.number,
+    type: PropTypes.string,
     alternative: PropTypes.bool
 }
 

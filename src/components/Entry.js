@@ -124,6 +124,7 @@ class Entry extends React.Component {
                         <FlipButton left={contentShowed !== 0} onClick={contentShowed !== 0 ? () => flipCard(id, -1) : null}></FlipButton>
                         <FlipButton right={contentShowed !== contents.length - 1} onClick={contentShowed !== contents.length - 1 ? () => flipCard(id, 1) : null}></FlipButton>
                      </CardType>
+        const date = new Date(timeAdded)
 
         return (  
             <StyledEntry selected={selected}>
@@ -131,7 +132,7 @@ class Entry extends React.Component {
                     {card}
                 </StyledParagraph>
                 <StyleAddedAt>
-                    Added: {timeAdded.toLocaleString()} 
+                    Added: {`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`} 
                     <br/>   
                     <span> <b>Category:</b> {tagged}</span>
                     <SelectButton selected={selected} onClick={() => selectOne(selected, id, tag)}> </SelectButton>
@@ -149,15 +150,12 @@ const mapDispatchToProps = dispatch => ({
 
 
 Entry.propTypes = {
-    navOpened: PropTypes.bool.isRequired,
-    onClick: PropTypes.func.isRequired,
     selectOne: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     selected: PropTypes.bool.isRequired,
     timeAdded: PropTypes.string.isRequired,
     contents: PropTypes.array.isRequired,
     tagged: PropTypes.string.isRequired,
-    tag: PropTypes.string.isRequired,
     contentShowed: PropTypes.number.isRequired,
     flipCard: PropTypes.func.isRequired
 }

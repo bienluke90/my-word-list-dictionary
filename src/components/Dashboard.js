@@ -39,7 +39,7 @@ class Dashboard extends React.Component {
     timer = 0
 
     state = {
-        scrollPosition: false
+        scrollPosition: 0
     }
 
     componentDidMount = () => {
