@@ -549,8 +549,6 @@ const defaultEntries = [
 ]
 
 const savedEntries = []
-let savedTags = []
-
 
 if(!localStorage.length) {
     for(let i = 0; i < defaultEntries.length; i++) {
@@ -564,8 +562,7 @@ if(localStorage.length) {
     }
 }
 
-savedTags = Array.from(new Set(savedEntries.map(e => e.tagged)))
-console.log(savedTags)
+const savedTags = Array.from(new Set(savedEntries.map(e => e.tagged)))
 
 const initState = {
     tags: savedTags,
