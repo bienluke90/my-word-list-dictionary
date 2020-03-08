@@ -244,6 +244,7 @@ class AddNewModal extends React.Component {
 
     languages = [
         "English",
+        "Definition",
         "German",
         "Polish",
         "French",
